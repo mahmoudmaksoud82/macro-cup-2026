@@ -1,0 +1,86 @@
+{
+  "entities": {
+    "Registration": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Registration",
+      "type": "object",
+      "description": "Represents a user's registration for a sport.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the registration entry."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the registrant."
+        },
+        "department": {
+          "type": "string",
+          "description": "The department of the registrant."
+        },
+        "maestroCode": {
+          "type": "string",
+          "description": "The Maestro code of the registrant. This code is unique per registration."
+        },
+        "nationalId": {
+          "type": "string",
+          "description": "The national ID of the registrant."
+        },
+        "contact": {
+          "type": "string",
+          "description": "The contact information of the registrant."
+        },
+        "gender": {
+          "type": "string",
+          "description": "The gender of the registrant (male or female)."
+        },
+        "sport": {
+          "type": "string",
+          "description": "The sport the registrant is registering for (e.g., running, football, penalty)."
+        },
+        "sportOption": {
+          "type": "string",
+          "description": "The specific option chosen for the selected sport (e.g., a specific football team choice)."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "department",
+        "maestroCode",
+        "nationalId",
+        "contact",
+        "gender",
+        "sport",
+        "sportOption"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/registrations/{registrationId}",
+        "definition": {
+          "entityName": "Registration",
+          "schema": {
+            "$ref": "#/backend/entities/Registration"
+          },
+          "description": "Stores user registration data for sports. Each document represents a single registration. The application logic enforces uniqueness of 'maestroCode' and 'sportOption'.",
+          "params": [
+            {
+              "name": "registrationId",
+              "description": "The unique identifier for the registration document."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "Based on the provided application requirements, a single collection called 'registrations' will be used to store user registration data. Each document in the 'registrations' collection will represent a single user's registration for a sport. This structure is chosen for simplicity and because there are no complex relationships between different data entities that would warrant a more complex structure with subcollections. Since there are no user specific collections created, path based ownership is not required.\n\n**Authorization Independence:** Since all documents are stored in a single 'registrations' collection without subcollections, there is no need for denormalization of authorization data from parent documents. Each document contains all the necessary information for registration purposes.\n\n**QAPs Support:**\n\n*   The single 'registrations' collection simplifies queries for listing registrations. Security rules can easily restrict access based on the application's requirements (e.g., only allow admins to list all registrations).\n*   The uniqueness constraints on 'maestroCode' and 'sportOption' are enforced at the application level to prevent duplicate registrations and option selections. Firestore security rules cannot directly enforce uniqueness, so this is handled in the application logic.\n*   Segregation is achieved by storing all registration data in a single collection with a uniform security posture. If different access requirements were needed for different types of registrations, separate collections could be created (e.g., '/admin_registrations' for registrations created by admins).\n\nSince all writes are handled via a trusted backend environment (as inferred from the PHP code), the security rules primarily focus on preventing unauthorized access to the database from untrusted clients. The application logic handles the validation and authorization logic, ensuring data integrity."
+  }
+}
