@@ -4,17 +4,17 @@
 
 @layer base {
   :root {
-    --background: 210 100% 98%;
+    --background: 0 0% 100% / 0;
     --foreground: 275 100% 5%;
-    --card: 0 0% 100%;
+    --card: 0 0% 100% / 0.95;
     --card-foreground: 275 100% 5%;
-    --popover: 0 0% 100%;
+    --popover: 0 0% 100% / 0.95;
     --popover-foreground: 275 100% 5%;
     --primary: 275 100% 25%;
     --primary-foreground: 210 100% 98%;
-    --secondary: 271 76% 95%;
+    --secondary: 271 76% 95% / 0.8;
     --secondary-foreground: 275 100% 25%;
-    --muted: 210 20% 90%;
+    --muted: 210 20% 90% / 0.8;
     --muted-foreground: 275 20% 40%;
     --accent: 271 76% 53%;
     --accent-foreground: 210 100% 98%;
@@ -23,33 +23,7 @@
     --border: 275 20% 90%;
     --input: 275 20% 90%;
     --ring: 275 100% 25%;
-    --chart-1: 275 100% 25%;
-    --chart-2: 271 76% 53%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
     --radius: 0.75rem;
-  }
-  .dark {
-    --background: 275 50% 5%;
-    --foreground: 210 100% 98%;
-    --card: 275 50% 8%;
-    --card-foreground: 210 100% 98%;
-    --popover: 275 50% 8%;
-    --popover-foreground: 210 100% 98%;
-    --primary: 271 76% 65%;
-    --primary-foreground: 275 50% 5%;
-    --secondary: 275 50% 15%;
-    --secondary-foreground: 210 100% 98%;
-    --muted: 275 50% 15%;
-    --muted-foreground: 210 20% 70%;
-    --accent: 271 76% 53%;
-    --accent-foreground: 210 100% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 275 50% 15%;
-    --input: 275 50% 15%;
-    --ring: 271 76% 65%;
   }
 }
 
@@ -59,5 +33,9 @@
   }
   body {
     @apply text-foreground font-body bg-transparent;
+    background-color: transparent !important;
+  }
+  html {
+    background-color: black; /* Background color behind the image if it fails to load */
   }
 }
