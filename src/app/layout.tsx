@@ -20,17 +20,21 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased text-foreground min-h-screen relative">
-        {/* Global Background Layer */}
+        {/* Fixed Global Background Layer */}
         <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
           <Image
             src="/Background.jpeg"
-            alt="Macro Cup Background"
+            alt="App Background"
             fill
-            className="object-cover opacity-10"
+            className="object-cover opacity-20"
             priority
           />
+          {/* Subtle overlay to improve readability over the background */}
+          <div className="absolute inset-0 bg-white/40" />
         </div>
-        {children}
+        <div className="relative z-10">
+          {children}
+        </div>
       </body>
     </html>
   );
