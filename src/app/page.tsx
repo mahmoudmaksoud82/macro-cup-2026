@@ -4,12 +4,12 @@ import { Toaster } from "@/components/ui/toaster";
 export default function Home() {
   return (
     <main className="min-h-screen pb-20 pt-10 relative bg-transparent">
-      {/* Hero Content (Without duplicate image) */}
-      <div className="container mx-auto px-4 mb-12 text-center text-white">
-        <h1 className="text-5xl md:text-7xl font-bold font-headline mb-4 drop-shadow-2xl">
+      {/* Hero Content */}
+      <div className="container mx-auto px-4 mb-12 text-center">
+        <h1 className="text-5xl md:text-7xl font-bold font-headline mb-4 text-primary drop-shadow-sm">
           Registration Champion
         </h1>
-        <p className="text-xl md:text-2xl font-medium drop-shadow-lg max-w-2xl mx-auto opacity-90">
+        <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto opacity-90 text-foreground">
           شارك في التحدي، أثبت مهاراتك، وكن جزءاً من الحدث الرياضي الأكبر
         </p>
       </div>
