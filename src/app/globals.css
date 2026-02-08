@@ -6,7 +6,7 @@
   :root {
     --background: 0 0% 100% / 0;
     --foreground: 186 100% 5%;
-    --card: 0 0% 100% / 0.95;
+    --card: 0 0% 100% / 0.85;
     --card-foreground: 186 100% 5%;
     --popover: 0 0% 100% / 0.95;
     --popover-foreground: 186 100% 5%;
@@ -23,7 +23,7 @@
     --border: 186 20% 90%;
     --input: 186 20% 90%;
     --ring: 186 100% 26%;
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
 }
 
@@ -33,11 +33,15 @@
   }
   html {
     background-color: transparent !important;
-    height: 100%;
   }
   body {
     @apply text-foreground font-body;
     background-color: transparent !important;
-    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .font-headline {
+    @apply font-bold tracking-tight;
   }
 }
