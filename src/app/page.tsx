@@ -1,3 +1,4 @@
+
 import RegistrationForm from "@/components/RegistrationForm";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -5,9 +6,23 @@ import { Toaster } from "@/components/ui/toaster";
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-sports');
+  const bgImage = PlaceHolderImages.find(img => img.id === 'app-background');
 
   return (
-    <main className="min-h-screen pb-20">
+    <main className="min-h-screen pb-20 relative">
+      {/* Background Image Layer */}
+      {bgImage?.imageUrl && (
+        <div className="fixed inset-0 z-[-1] pointer-events-none opacity-10">
+          <Image
+            src={bgImage.imageUrl}
+            alt="App Background"
+            fill
+            className="object-cover"
+            data-ai-hint={bgImage.imageHint}
+          />
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden mb-[-4rem]">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 to-transparent z-10" />
@@ -39,9 +54,6 @@ export default function Home() {
 
       {/* Footer Info */}
       <div className="container mx-auto px-4 mt-12 text-center text-muted-foreground">
-        <p className="text-sm">
-          &copy; {new Date().getFullYear()} مركز التسجيل الرياضي. جميع الحقوق محفوظة.
-        </p>
         <div className="mt-4 flex justify-center gap-6">
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-blue-500" />

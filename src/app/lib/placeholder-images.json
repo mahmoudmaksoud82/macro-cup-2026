@@ -4,14 +4,20 @@
     {
       "id": "hero-sports",
       "description": "Athletes in a stadium",
-      "imageUrl": "https://picsum.photos/seed/sports1/1200/600",
+      "imageUrl": "https://images.unsplash.com/photo-1760115492835-adc04bcea8c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdGFkaXVtJTIwYXRobGV0ZXN8ZW58MHx8fHwxNzcwNTM4OTY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "stadium athletes"
     },
     {
       "id": "football",
       "description": "Football on grass",
-      "imageUrl": "https://picsum.photos/seed/football1/400/300",
+      "imageUrl": "https://images.unsplash.com/photo-1614632537190-23e4146777db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzb2NjZXIlMjBiYWxsfGVufDB8fHx8MTc3MDQ1NTkzNnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "soccer ball"
+    },
+    {
+      "id": "app-background",
+      "description": "Abstract sports background",
+      "imageUrl": "https://picsum.photos/seed/sportsbg/1920/1080",
+      "imageHint": "sports background"
     }
   ]
 }
