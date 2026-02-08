@@ -1,0 +1,17 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-sports",
+      "description": "Athletes in a stadium",
+      "imageUrl": "https://picsum.photos/seed/sports1/1200/600",
+      "imageHint": "stadium athletes"
+    },
+    {
+      "id": "football",
+      "description": "Football on grass",
+      "imageUrl": "https://picsum.photos/seed/football1/400/300",
+      "imageHint": "soccer ball"
+    }
+  ]
+}
