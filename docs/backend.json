@@ -12,15 +12,15 @@
         },
         "name": {
           "type": "string",
-          "description": "The name of the registrant."
+          "description": "The name of the person registering."
         },
         "department": {
           "type": "string",
-          "description": "The department of the registrant."
+          "description": "The department the registrant belongs to."
         },
         "maestroCode": {
           "type": "string",
-          "description": "The Maestro code of the registrant. This code is unique per registration."
+          "description": "The Maestro code of the registrant. Must be unique."
         },
         "nationalId": {
           "type": "string",
@@ -28,7 +28,7 @@
         },
         "contact": {
           "type": "string",
-          "description": "The contact information of the registrant."
+          "description": "Contact information of the registrant."
         },
         "gender": {
           "type": "string",
@@ -36,11 +36,11 @@
         },
         "sport": {
           "type": "string",
-          "description": "The sport the registrant is registering for (e.g., running, football, penalty)."
+          "description": "The sport the registrant is signing up for."
         },
         "sportOption": {
           "type": "string",
-          "description": "The specific option chosen for the selected sport (e.g., a specific football team choice)."
+          "description": "The specific option chosen for the sport (e.g., football team name)."
         }
       },
       "required": [
@@ -71,16 +71,16 @@
           "schema": {
             "$ref": "#/backend/entities/Registration"
           },
-          "description": "Stores user registration data for sports. Each document represents a single registration. The application logic enforces uniqueness of 'maestroCode' and 'sportOption'.",
+          "description": "Stores user registration data for sports. Maestro code must be unique. Sport option must be unique.",
           "params": [
             {
               "name": "registrationId",
-              "description": "The unique identifier for the registration document."
+              "description": "Unique identifier for the registration document."
             }
           ]
         }
       }
     ],
-    "reasoning": "Based on the provided application requirements, a single collection called 'registrations' will be used to store user registration data. Each document in the 'registrations' collection will represent a single user's registration for a sport. This structure is chosen for simplicity and because there are no complex relationships between different data entities that would warrant a more complex structure with subcollections. Since there are no user specific collections created, path based ownership is not required.\n\n**Authorization Independence:** Since all documents are stored in a single 'registrations' collection without subcollections, there is no need for denormalization of authorization data from parent documents. Each document contains all the necessary information for registration purposes.\n\n**QAPs Support:**\n\n*   The single 'registrations' collection simplifies queries for listing registrations. Security rules can easily restrict access based on the application's requirements (e.g., only allow admins to list all registrations).\n*   The uniqueness constraints on 'maestroCode' and 'sportOption' are enforced at the application level to prevent duplicate registrations and option selections. Firestore security rules cannot directly enforce uniqueness, so this is handled in the application logic.\n*   Segregation is achieved by storing all registration data in a single collection with a uniform security posture. If different access requirements were needed for different types of registrations, separate collections could be created (e.g., '/admin_registrations' for registrations created by admins).\n\nSince all writes are handled via a trusted backend environment (as inferred from the PHP code), the security rules primarily focus on preventing unauthorized access to the database from untrusted clients. The application logic handles the validation and authorization logic, ensuring data integrity."
+    "reasoning": "The Firestore data structure is designed to store user registration data for sports, ensuring uniqueness of Maestro codes and sport options. To maintain data integrity and enforce constraints (such as unique Maestro codes and sport options), the data is stored directly in a single collection. Since all documents in the `registrations` collection have identical security requirements (only validated and unique registration data), this approach adheres to the Structural Segregation principle. Authorization is managed at the application level through backend validation (PHP code). This prevents duplicate Maestro codes and ensures sport option availability which enforces the uniqueness requirements described in the user request. Although user-based authorization isn't explicitly enforced in the data structure, the server-side validation and uniqueness constraints are critically important to the applications expected behavior. The system relies on server-side checks to ensure data integrity and prevent conflicts, mirroring the logic in the original PHP code."
   }
 }

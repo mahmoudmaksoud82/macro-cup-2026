@@ -3,49 +3,42 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * DATABASE-WIDE SECURITY POSTURE
-     * 
-     * Core Philosophy:
-     * This ruleset enforces a strict user-ownership model for registration data. Although the 
-     * documentation suggests writes may occur via a trusted backend, these rules protect the 
-     * client-side interface by ensuring that if a user interacts with the database directly, 
-     * they can only access and manage their own registration.
-     * 
-     * Data Structure:
-     * The application uses a flat top-level collection: /registrations/{registrationId}.
-     * This structure allows for direct access to individual registration records.
-     * 
-     * Key Security Decisions:
-     * 1. Private by Default: Read access is restricted to the owner of the registration to 
-     *    protect Personally Identifiable Information (PII) like National IDs and contact info.
-     * 2. No Public Listing: Listing the entire 'registrations' collection is denied to prevent 
-     *    data scraping and privacy leaks. Administrative listing should be handled via 
-     *    privileged environments or custom claims.
-     * 3. Path-Identity Alignment: For relational integrity, the 'id' field within the 
-     *    document must match the document's ID in the path (which corresponds to the User's UID).
-     * 4. Denormalization for Authorization: The system relies on the document ID being the 
-     *    authenticated user's UID to perform zero-cost ownership checks.
+     * CORE PHILOSOPHY
+     * This ruleset implements a strict "Self-Service Registration" model. Since the data 
+     * contains sensitive personal information (National ID, Contact details), access is 
+     * restricted to the individual who created the registration. 
+     *
+     * DATA STRUCTURE
+     * All registration data is stored in the top-level `/registrations` collection. 
+     * Each document is identified by a unique ID that corresponds to the user's 
+     * authenticated UID to ensure a 1:1 relationship between a user and their registration.
+     *
+     * KEY SECURITY DECISIONS
+     * 1. Restricted Visibility: Users can only 'get' or 'list' their own registration data. 
+     *    Global listing is disabled to protect PII (Personally Identifiable Information).
+     * 2. Self-Creation: Users are permitted to create their own registration document 
+     *    provided the document ID matches their Authentication UID.
+     * 3. Identity Consistency: The internal 'id' field of the document must match the 
+     *    Firestore document ID (and thus the user's UID) to maintain relational integrity.
+     * 4. Uniqueness Constraints: Note that Firestore Security Rules cannot natively enforce 
+     *    global uniqueness for fields like 'maestroCode' or 'sportOption' across different 
+     *    documents. These constraints must be managed via a backend process or a dedicated 
+     *    uniqueness collection pattern.
      */
 
-    // --- Global Helper Functions ---
+    // --- Helper Functions ---
 
-    /**
-     * @description Checks if the request is from an authenticated user.
-     */
+    /** @description Checks if the request is made by an authenticated user. */
     function isSignedIn() {
       return request.auth != null;
     }
 
-    /**
-     * @description Checks if the provided ID matches the authenticated user's UID.
-     */
+    /** @description Checks if the authenticated user's UID matches the provided ID. */
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    /**
-     * @description Verifies ownership and ensures the document exists for state-changing operations.
-     */
+    /** @description Verifies ownership and ensures the document exists for state-changing operations. */
     function isExistingOwner(userId) {
       return resource != null && isOwner(userId);
     }
@@ -53,27 +46,27 @@ service cloud.firestore {
     // --- Collection Rules ---
 
     /**
-     * @description Manages individual sport registrations. Access is restricted to the specific registrant.
+     * @description Rules for the registrations collection, securing sensitive athlete/student data.
      * @path /registrations/{registrationId}
-     * @allow (get) If the user's UID matches the registrationId.
-     * @allow (create) If the user is signed in, the doc ID matches their UID, and the internal 'id' field matches.
-     * @deny (list) Denied for all users to prevent mass data exposure.
-     * @principle Restricts access to a user's own data tree and validates relational integrity.
+     * @allow (create) If the user is signed in and the registrationId matches their UID.
+     * @deny (list) If a user attempts to query registrations belonging to other users.
+     * @principle Enforces document ownership and validates identity-to-path consistency.
      */
     match /registrations/{registrationId} {
       
-      // Read Operations
-      allow get: if isOwner(registrationId);
-      allow list: if false; // Deny mass listing to protect user PII (National ID, contact info).
+      // Allow users to see their own registration data only.
+      allow get, list: if isOwner(registrationId);
 
-      // Write Operations
+      // Allow creation only if the document ID matches the user's UID and the internal ID is consistent.
       allow create: if isOwner(registrationId) && request.resource.data.id == registrationId;
+
+      // Allow updates and deletions only by the owner.
       allow update: if isExistingOwner(registrationId) && request.resource.data.id == resource.data.id;
       allow delete: if isExistingOwner(registrationId);
     }
 
-    // --- Default Deny ---
-    // Catch-all to ensure no unintended access to other paths.
+    // --- Global Deny ---
+    // Explicitly deny access to any other paths or unspecified operations.
     match /{path=**} {
       allow read, write: if false;
     }
