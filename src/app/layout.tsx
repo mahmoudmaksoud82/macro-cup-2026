@@ -26,11 +26,11 @@ export default function RootLayout({
             src="/Background.jpeg"
             alt="App Background"
             fill
-            className="object-cover opacity-20"
+            className="object-cover opacity-100"
             priority
           />
-          {/* Subtle overlay to improve readability over the background */}
-          <div className="absolute inset-0 bg-white/40" />
+          {/* Subtle overlay to improve readability if needed, but keeping it very light to show the image */}
+          <div className="absolute inset-0 bg-white/20" />
         </div>
         <div className="relative z-10">
           {children}

@@ -7,7 +7,8 @@ export default function Home() {
     <main className="min-h-screen pb-20 relative">
       {/* Hero Section */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden mb-[-4rem]">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 to-primary/40 z-10" />
+        {/* Adjusted gradient to be more transparent so the image is visible */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/60 to-transparent z-10" />
         <Image
           src="/Background.jpeg"
           alt="Registration Champion"
