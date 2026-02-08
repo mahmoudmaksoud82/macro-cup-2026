@@ -36,7 +36,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-primary/20" />
         )}
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
-          <h1 className="text-4xl md:text-5xl font-bold font-headline mb-2 drop-shadow-md">منصة تسجيل الرياضات</h1>
+          <h1 className="text-4xl md:text-5xl font-bold font-headline mb-2 drop-shadow-md">Registration Champion</h1>
           <p className="text-lg md:text-xl font-medium drop-shadow-sm max-w-2xl">
             شارك في التحدي، أثبت مهاراتك، وكن جزءاً من الحدث الرياضي الأكبر
           </p>
