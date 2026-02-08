@@ -6,7 +6,7 @@
   :root {
     --background: 0 0% 100% / 0;
     --foreground: 186 100% 5%;
-    --card: 0 0% 100% / 0.85;
+    --card: 0 0% 100% / 0.9;
     --card-foreground: 186 100% 5%;
     --popover: 0 0% 100% / 0.95;
     --popover-foreground: 186 100% 5%;
@@ -31,12 +31,12 @@
   * {
     @apply border-border;
   }
-  html {
+  html, body {
+    @apply h-full w-full;
     background-color: transparent !important;
   }
   body {
-    @apply text-foreground font-body;
-    background-color: transparent !important;
+    @apply text-foreground font-body antialiased;
   }
 }
 

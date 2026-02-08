@@ -14,16 +14,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className="h-full overflow-x-hidden">
+    <html lang="ar" dir="rtl" className="h-full">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased min-h-screen relative bg-transparent">
+      <body className="font-body min-h-screen relative">
         <FirebaseClientProvider>
           {/* Full Stretch Fixed Background Wrapper */}
-          <div className="fixed inset-0 -z-50 w-full h-full pointer-events-none">
+          <div className="fixed inset-0 -z-50 w-full h-full">
             <Image
               src="/Background.png"
               alt="App Background"
@@ -31,12 +31,11 @@ export default function RootLayout({
               className="object-cover"
               priority
               quality={100}
-              unoptimized
             />
           </div>
           
           {/* Main Content Area */}
-          <div className="relative z-10 w-full min-h-screen">
+          <div className="relative z-10 w-full min-h-screen overflow-y-auto">
             {children}
           </div>
         </FirebaseClientProvider>
