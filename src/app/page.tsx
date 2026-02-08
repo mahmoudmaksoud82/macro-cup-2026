@@ -1,4 +1,3 @@
-
 import RegistrationForm from "@/components/RegistrationForm";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -15,7 +14,7 @@ export default function Home() {
           src="/Background.jpeg"
           alt="App Background"
           fill
-          className="object-cover opacity-20"
+          className="object-cover opacity-25"
           priority
         />
       </div>
