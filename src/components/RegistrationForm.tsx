@@ -1,8 +1,6 @@
-
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
-import { registerUser, getUsedFootballOptions } from "@/app/actions/register";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,53 +10,100 @@ import { FOOTBALL_OPTIONS, GenderType, SportType } from "@/lib/sports";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2, AlertCircle, Info, Loader2, Trophy, Users, Phone, Hash, Building2, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useFirestore, useAuth, useUser, useCollection } from "@/firebase";
+import { collection, doc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
+import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login";
+import { useMemoFirebase } from "@/firebase/provider";
 
 export default function RegistrationForm() {
-  const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const firestore = useFirestore();
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
   
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [gender, setGender] = useState<GenderType | "">("");
   const [sport, setSport] = useState<SportType | "">("");
   const [sportOption, setSportOption] = useState<string>("");
-  const [usedOptions, setUsedOptions] = useState<string[]>([]);
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
+  // Get all registrations to check for football options uniqueness
+  const registrationsQuery = useMemoFirebase(() => {
+    return query(collection(firestore, "registrations"));
+  }, [firestore]);
+  
+  const { data: allRegistrations } = useCollection(registrationsQuery);
+
+  const usedOptions = allRegistrations 
+    ? allRegistrations.filter(r => r.sport === 'football').map(r => r.sportOption)
+    : [];
+
   useEffect(() => {
-    // Fetch used options on mount and when needed
-    async function fetchUsed() {
-      const used = await getUsedFootballOptions();
-      setUsedOptions(used);
+    if (!isUserLoading && !user) {
+      initiateAnonymousSignIn(auth);
     }
-    fetchUsed();
-  }, [status]);
+  }, [user, isUserLoading, auth]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!user) {
+      toast({ variant: "destructive", title: "خطأ", description: "يرجى الانتظار حتى يتم تسجيل الدخول." });
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name")?.toString() || "",
+      department: formData.get("department")?.toString() || "",
+      maestroCode: formData.get("maestroCode")?.toString() || "",
+      nationalId: formData.get("nationalId")?.toString() || "",
+      contact: formData.get("contact")?.toString() || "",
+      gender: gender as GenderType,
+      sport: sport as SportType,
+      sportOption: sport === 'football' ? sportOption : sport,
+    };
+
+    setIsSubmitting(true);
+    setStatus(null);
+
+    // Uniqueness Checks
+    const maestroQuery = query(collection(firestore, "registrations"), where("maestroCode", "==", data.maestroCode));
+    const maestroSnapshot = await getDocs(maestroQuery);
     
-    startTransition(async () => {
-      const result = await registerUser(formData);
-      if (result.error) {
-        setStatus({ type: 'error', message: result.error });
-        toast({
-          variant: "destructive",
-          title: "خطأ في التسجيل",
-          description: result.error,
-        });
-      } else {
-        setStatus({ type: 'success', message: result.success || "تم بنجاح" });
-        setGender("");
-        setSport("");
-        setSportOption("");
-        (e.target as HTMLFormElement).reset();
-      }
-    });
+    if (!maestroSnapshot.empty) {
+      setStatus({ type: 'error', message: "هذا الكود مسجل بالفعل ولا يمكن التسجيل مرة أخرى." });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (data.sport === 'football' && usedOptions.includes(data.sportOption)) {
+      setStatus({ type: 'error', message: "هذا الاختيار تم حجزه بالفعل، يرجى اختيار عنصر آخر." });
+      setIsSubmitting(false);
+      return;
+    }
+
+    const registrationId = user.uid;
+    const finalData = {
+      ...data,
+      id: registrationId,
+      createdAt: serverTimestamp(),
+    };
+
+    setDocumentNonBlocking(doc(firestore, "registrations", registrationId), finalData, { merge: true });
+    
+    setStatus({ type: 'success', message: "تم التسجيل بنجاح!" });
+    setGender("");
+    setSport("");
+    setSportOption("");
+    (e.target as HTMLFormElement).reset();
+    setIsSubmitting(false);
   };
 
   const availableFootballOptions = FOOTBALL_OPTIONS.filter(opt => !usedOptions.includes(opt));
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary">
+    <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95">
       <CardHeader className="text-center">
         <div className="flex justify-center mb-4">
           <div className="p-3 bg-primary/10 rounded-full">
@@ -172,19 +217,15 @@ export default function RegistrationForm() {
                 <p className="text-[11px] text-muted-foreground">الاختيارات تختفي تلقائياً بعد حجزها.</p>
               </div>
             )}
-            
-            {(sport === 'running' || sport === 'penalty') && (
-              <input type="hidden" name="sportOption" value={sport} />
-            )}
           </div>
         </CardContent>
         <CardFooter>
           <Button 
             type="submit" 
             className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 transition-all shadow-lg" 
-            disabled={isPending}
+            disabled={isSubmitting || isUserLoading}
           >
-            {isPending ? (
+            {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                 جاري التسجيل...

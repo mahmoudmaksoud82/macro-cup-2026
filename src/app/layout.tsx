@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import Image from 'next/image';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'Macro Cup 2026 - Registration',
@@ -20,23 +21,25 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased min-h-screen relative bg-transparent">
-        {/* Full Stretch Fixed Background Wrapper */}
-        <div className="fixed inset-0 -z-50 w-full h-full pointer-events-none">
-          <Image
-            src="/Background.png"
-            alt="App Background"
-            fill
-            className="object-cover"
-            priority
-            quality={100}
-            unoptimized
-          />
-        </div>
-        
-        {/* Main Content Area */}
-        <div className="relative z-10 w-full min-h-screen">
-          {children}
-        </div>
+        <FirebaseClientProvider>
+          {/* Full Stretch Fixed Background Wrapper */}
+          <div className="fixed inset-0 -z-50 w-full h-full pointer-events-none">
+            <Image
+              src="/Background.png"
+              alt="App Background"
+              fill
+              className="object-cover"
+              priority
+              quality={100}
+              unoptimized
+            />
+          </div>
+          
+          {/* Main Content Area */}
+          <div className="relative z-10 w-full min-h-screen">
+            {children}
+          </div>
+        </FirebaseClientProvider>
       </body>
     </html>
   );
