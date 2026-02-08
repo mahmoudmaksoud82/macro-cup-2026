@@ -1,23 +1,35 @@
 "use client";
 
-import { useFirestore, useCollection } from "@/firebase";
-import { collection, query, orderBy } from "firebase/firestore";
+import { useFirestore, useCollection, deleteDocumentNonBlocking } from "@/firebase";
+import { collection, query, orderBy, doc } from "firebase/firestore";
 import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Users, LayoutDashboard, Download } from "lucide-react";
+import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 export default function RegistrationsPage() {
   const firestore = useFirestore();
+  const { toast } = useToast();
 
   const q = useMemoFirebase(() => {
     return query(collection(firestore, "registrations"), orderBy("createdAt", "desc"));
   }, [firestore]);
 
   const { data: registrations, isLoading } = useCollection(q);
+
+  const handleDelete = (id: string, name: string) => {
+    if (confirm(`هل أنت متأكد من حذف تسجيل "${name}"؟`)) {
+      deleteDocumentNonBlocking(doc(firestore, "registrations", id));
+      toast({
+        title: "تم الحذف",
+        description: `تم حذف تسجيل ${name} بنجاح.`,
+      });
+    }
+  };
 
   const downloadExcel = () => {
     if (!registrations || registrations.length === 0) return;
@@ -116,6 +128,7 @@ export default function RegistrationsPage() {
                       <TableHead className="text-right">الاختيار</TableHead>
                       <TableHead className="text-right">النوع</TableHead>
                       <TableHead className="text-right">كود مايسترو</TableHead>
+                      <TableHead className="text-center">إجراءات</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -131,6 +144,16 @@ export default function RegistrationsPage() {
                         <TableCell>{reg.sportOption}</TableCell>
                         <TableCell>{reg.gender === 'male' ? 'رجال' : 'سيدات'}</TableCell>
                         <TableCell className="font-mono text-xs">{reg.maestroCode}</TableCell>
+                        <TableCell className="text-center">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="text-destructive hover:bg-destructive/10"
+                            onClick={() => handleDelete(reg.id, reg.name)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -6,7 +6,7 @@ service cloud.firestore {
      * CORE PHILOSOPHY
      * This ruleset implements a registration model for a sports event.
      * To allow the dashboard to function while maintaining some level of privacy,
-     * we allow authenticated users to view the list of registrations.
+     * we allow authenticated users to view the list of registrations and manage them.
      */
 
     // --- Helper Functions ---
@@ -33,19 +33,21 @@ service cloud.firestore {
      * @path /registrations/{registrationId}
      * @allow (read) If the user is signed in (allowing the dashboard to function).
      * @allow (create) If the user is signed in and the registrationId matches their UID.
+     * @allow (delete) If the user is signed in (to allow admin management from the dashboard).
      */
     match /registrations/{registrationId} {
       
       // Allow authenticated users to read registration data.
-      // This enables the registrations list page to display data to anyone who has accessed the app.
       allow read: if isSignedIn();
 
       // Allow creation only if the document ID matches the user's UID.
       allow create: if isOwner(registrationId) && request.resource.data.id == registrationId;
 
-      // Allow updates and deletions only by the owner.
+      // Allow updates only by the owner.
       allow update: if isExistingOwner(registrationId) && request.resource.data.id == resource.data.id;
-      allow delete: if isExistingOwner(registrationId);
+      
+      // Allow deletion for any authenticated user to enable the dashboard management.
+      allow delete: if isSignedIn();
     }
 
     // --- Global Deny ---
