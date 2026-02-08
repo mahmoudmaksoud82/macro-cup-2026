@@ -12,14 +12,18 @@ export default function Home() {
       {/* Hero Section */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden mb-[-4rem]">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 to-transparent z-10" />
-        <Image
-          src={heroImage?.imageUrl || ""}
-          alt="Sports Hero"
-          fill
-          className="object-cover"
-          data-ai-hint={heroImage?.imageHint}
-          priority
-        />
+        {heroImage?.imageUrl ? (
+          <Image
+            src={heroImage.imageUrl}
+            alt="Sports Hero"
+            fill
+            className="object-cover"
+            data-ai-hint={heroImage.imageHint}
+            priority
+          />
+        ) : (
+          <div className="absolute inset-0 bg-primary/20" />
+        )}
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
           <h1 className="text-4xl md:text-5xl font-bold font-headline mb-2 drop-shadow-md">منصة تسجيل الرياضات</h1>
           <p className="text-lg md:text-xl font-medium drop-shadow-sm max-w-2xl">
