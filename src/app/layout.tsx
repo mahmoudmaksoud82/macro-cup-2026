@@ -25,7 +25,7 @@ export default function RootLayout({
           {/* Full Stretch Fixed Background Wrapper */}
           <div className="fixed inset-0 -z-50 w-full h-full">
             <Image
-              src="/Background.png"
+              src="/Background.jpeg"
               alt="App Background"
               fill
               className="object-cover"
