@@ -8,21 +8,10 @@ export default function Home() {
 
   return (
     <main className="min-h-screen pb-20 relative">
-      {/* Background Image Layer */}
-      <div className="fixed inset-0 z-[-1] pointer-events-none">
-        <Image
-          src="/Background.jpeg"
-          alt="App Background"
-          fill
-          className="object-cover opacity-25"
-          priority
-        />
-      </div>
-
       {/* Hero Section */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden mb-[-4rem]">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 to-transparent z-10" />
-        {heroImage?.imageUrl ? (
+        {heroImage?.imageUrl && (
           <Image
             src={heroImage.imageUrl}
             alt="Sports Hero"
@@ -31,8 +20,6 @@ export default function Home() {
             data-ai-hint={heroImage.imageHint}
             priority
           />
-        ) : (
-          <div className="absolute inset-0 bg-primary/20" />
         )}
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
           <h1 className="text-4xl md:text-5xl font-bold font-headline mb-2 drop-shadow-md">Registration Champion</h1>
