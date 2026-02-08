@@ -4,9 +4,9 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100% / 0;
+    --background: 0 0% 0% / 0;
     --foreground: 275 100% 5%;
-    --card: 0 0% 100% / 0.95;
+    --card: 0 0% 100% / 0.9;
     --card-foreground: 275 100% 5%;
     --popover: 0 0% 100% / 0.95;
     --popover-foreground: 275 100% 5%;
@@ -31,11 +31,13 @@
   * {
     @apply border-border;
   }
+  html {
+    @apply bg-transparent;
+    height: 100%;
+  }
   body {
     @apply text-foreground font-body bg-transparent;
     background-color: transparent !important;
-  }
-  html {
-    background-color: black; /* Background color behind the image if it fails to load */
+    min-height: 100vh;
   }
 }

@@ -19,8 +19,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased text-foreground min-h-screen relative bg-transparent">
-        {/* Full Stretch Background Layer */}
+      <body className="font-body antialiased min-h-screen relative overflow-x-hidden">
+        {/* Full Stretch Fixed Background */}
         <div className="fixed inset-0 z-[-1] pointer-events-none">
           <Image
             src="/Background.jpeg"
@@ -29,12 +29,11 @@ export default function RootLayout({
             className="object-cover"
             priority
             quality={100}
+            unoptimized
           />
-          {/* Overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-black/10" />
         </div>
         
-        <div className="relative z-10">
+        <div className="relative z-10 w-full min-h-screen">
           {children}
         </div>
       </body>
