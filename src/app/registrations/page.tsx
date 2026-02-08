@@ -6,7 +6,7 @@ import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Users, LayoutDashboard } from "lucide-react";
+import { Loader2, Trophy, Users, LayoutDashboard, Download } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -19,15 +19,75 @@ export default function RegistrationsPage() {
 
   const { data: registrations, isLoading } = useCollection(q);
 
+  const downloadExcel = () => {
+    if (!registrations || registrations.length === 0) return;
+
+    // تهيئة العناوين
+    const headers = [
+      "الاسم",
+      "الإدارة",
+      "الرياضة",
+      "الاختيار",
+      "النوع",
+      "كود مايسترو",
+      "الرقم القومي",
+      "رقم التواصل",
+      "تاريخ التسجيل"
+    ];
+
+    // تحويل البيانات إلى صفوف CSV
+    const csvRows = [
+      headers.join(","), // الصف الأول هو العناوين
+      ...registrations.map(reg => {
+        const sportLabel = reg.sport === 'football' ? 'كرة قدم' : reg.sport === 'penalty' ? 'ضربات جزاء' : 'جري';
+        const genderLabel = reg.gender === 'male' ? 'رجال' : 'سيدات';
+        const date = reg.createdAt?.toDate ? reg.createdAt.toDate().toLocaleString('ar-EG') : '';
+        
+        return [
+          `"${reg.name}"`,
+          `"${reg.department}"`,
+          `"${sportLabel}"`,
+          `"${reg.sportOption}"`,
+          `"${genderLabel}"`,
+          `"${reg.maestroCode}"`,
+          `"${reg.nationalId}"`,
+          `"${reg.contact}"`,
+          `"${date}"`
+        ].join(",");
+      })
+    ];
+
+    const csvContent = "\ufeff" + csvRows.join("\n"); // إضافة BOM لضمان دعم اللغة العربية في إكسل
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `registrations_macro_cup_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <main className="min-h-screen pb-20 pt-10 px-4">
       <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <Link href="/">
-            <Button variant="outline" className="gap-2">
-              <LayoutDashboard className="w-4 h-4" /> العودة للتسجيل
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <Button variant="outline" className="gap-2">
+                <LayoutDashboard className="w-4 h-4" /> العودة للتسجيل
+              </Button>
+            </Link>
+            <Button 
+              onClick={downloadExcel} 
+              variant="secondary" 
+              className="gap-2 bg-green-600 hover:bg-green-700 text-white border-none"
+              disabled={!registrations || registrations.length === 0}
+            >
+              <Download className="w-4 h-4" /> تحميل Excel
             </Button>
-          </Link>
+          </div>
           <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
             <Trophy className="w-8 h-8" /> قائمة المسجلين
           </h1>
