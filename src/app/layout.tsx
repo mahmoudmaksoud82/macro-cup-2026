@@ -23,7 +23,7 @@ export default function RootLayout({
         {/* Full Stretch Fixed Background */}
         <div className="fixed inset-0 z-[-1] pointer-events-none">
           <Image
-            src="/Background.jpeg"
+            src="/Background.png"
             alt="App Background"
             fill
             className="object-cover"
