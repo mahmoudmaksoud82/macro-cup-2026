@@ -21,7 +21,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased min-h-screen relative overflow-x-hidden bg-transparent">
         {/* Full Stretch Fixed Background */}
-        <div className="fixed inset-0 z-[-1] pointer-events-none">
+        <div className="fixed inset-0 z-0 pointer-events-none">
           <Image
             src="/Background.png"
             alt="App Background"
@@ -33,6 +33,7 @@ export default function RootLayout({
           />
         </div>
         
+        {/* Main Content Wrapper */}
         <div className="relative z-10 w-full min-h-screen bg-transparent">
           {children}
         </div>

@@ -32,12 +32,11 @@
     @apply border-border;
   }
   html {
-    @apply bg-transparent;
     background-color: transparent !important;
     height: 100%;
   }
   body {
-    @apply text-foreground font-body bg-transparent;
+    @apply text-foreground font-body;
     background-color: transparent !important;
     min-height: 100vh;
   }

@@ -1,4 +1,3 @@
-
 {
   "placeholderImages": [
     {
@@ -15,8 +14,8 @@
     },
     {
       "id": "app-background",
-      "description": "Abstract sports background",
-      "imageUrl": "https://picsum.photos/seed/sportsbg/1920/1080",
+      "description": "Macro Cup Background",
+      "imageUrl": "/Background.png",
       "imageHint": "sports background"
     }
   ]
