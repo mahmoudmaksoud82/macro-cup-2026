@@ -1,4 +1,3 @@
-
 import RegistrationForm from "@/components/RegistrationForm";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -12,7 +11,7 @@ export default function Home() {
       {/* Hero Section */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden mb-[-4rem]">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 to-transparent z-10" />
-        {heroImage?.imageUrl ? (
+        {heroImage?.imageUrl && (
           <Image
             src={heroImage.imageUrl}
             alt="Sports Hero"
@@ -21,7 +20,8 @@ export default function Home() {
             data-ai-hint={heroImage.imageHint}
             priority
           />
-        ) : (
+        )}
+        {!heroImage?.imageUrl && (
           <div className="absolute inset-0 bg-primary/20" />
         )}
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
@@ -43,10 +43,6 @@ export default function Home() {
           &copy; {new Date().getFullYear()} مركز التسجيل الرياضي. جميع الحقوق محفوظة.
         </p>
         <div className="mt-4 flex justify-center gap-6">
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="text-xs">نظام الحجز الفوري</span>
-          </div>
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-blue-500" />
             <span className="text-xs">تحديثات تلقائية</span>
