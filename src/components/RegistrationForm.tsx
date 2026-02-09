@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { FOOTBALL_OPTIONS, GOVERNORATES, GenderType, SportType, Registration } from "@/lib/sports";
+import { FOOTBALL_OPTIONS, GOVERNORATES, T_SHIRT_SIZES, GenderType, SportType, Registration } from "@/lib/sports";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle2, AlertCircle, Info, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin, Briefcase } from "lucide-react";
+import { CheckCircle2, AlertCircle, Info, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin, Briefcase, Shirt } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useAuth, useUser, useCollection } from "@/firebase";
 import { collection, doc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
@@ -28,6 +28,7 @@ export default function RegistrationForm() {
   const [governorate, setGovernorate] = useState<string>("");
   const [sport, setSport] = useState<SportType | "">("");
   const [sportOption, setSportOption] = useState<string>("");
+  const [tShirtSize, setTShirtSize] = useState<string>("");
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
   const registrationsQuery = useMemoFirebase(() => {
@@ -54,7 +55,7 @@ export default function RegistrationForm() {
     }
 
     const formData = new FormData(e.currentTarget);
-    const data = {
+    const data: Partial<Registration> = {
       name: formData.get("name")?.toString() || "",
       department: formData.get("department")?.toString() || "",
       jobTitle: formData.get("jobTitle")?.toString() || "",
@@ -64,8 +65,16 @@ export default function RegistrationForm() {
       contact: formData.get("contact")?.toString() || "",
       gender: gender as GenderType,
       sport: sport as SportType,
-      sportOption: sport === 'football' ? sportOption : sport,
+      sportOption: sport === 'football' ? sportOption : sport as string,
     };
+
+    if (sport === 'football') {
+      data.tShirtSize = tShirtSize;
+      if (!tShirtSize) {
+        setStatus({ type: 'error', message: "يرجى اختيار مقاس التيشرت." });
+        return;
+      }
+    }
 
     if (!data.governorate) {
       setStatus({ type: 'error', message: "يرجى اختيار المحافظة." });
@@ -84,7 +93,7 @@ export default function RegistrationForm() {
       return;
     }
 
-    if (data.sport === 'football' && usedOptions.includes(data.sportOption)) {
+    if (data.sport === 'football' && usedOptions.includes(data.sportOption!)) {
       setStatus({ type: 'error', message: "هذا الاختيار تم حجزه بالفعل، يرجى اختيار عنصر آخر." });
       setIsSubmitting(false);
       return;
@@ -104,6 +113,7 @@ export default function RegistrationForm() {
     setSport("");
     setGovernorate("");
     setSportOption("");
+    setTShirtSize("");
     (e.target as HTMLFormElement).reset();
     setIsSubmitting(false);
   };
@@ -225,19 +235,36 @@ export default function RegistrationForm() {
             </div>
 
             {sport === 'football' && (
-              <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                <Label className="flex items-center gap-2">الاختيار (كرة قدم)</Label>
-                <Select name="sportOption" required onValueChange={setSportOption}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="اختر الاختيار المتاح" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-60">
-                    {availableFootballOptions.map((opt) => (
-                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <>
+                <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <Label className="flex items-center gap-2">الاختيار (كرة قدم)</Label>
+                  <Select name="sportOption" required onValueChange={setSportOption}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="اختر الاختيار المتاح" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-60">
+                      {availableFootballOptions.map((opt) => (
+                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <Label className="flex items-center gap-2">
+                    <Shirt className="w-4 h-4 text-accent" /> مقاس التيشرت
+                  </Label>
+                  <Select value={tShirtSize} onValueChange={setTShirtSize} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="اختر المقاس" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {T_SHIRT_SIZES.map((size) => (
+                        <SelectItem key={size} value={size}>{size}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
             )}
           </div>
         </CardContent>

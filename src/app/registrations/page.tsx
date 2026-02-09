@@ -7,7 +7,7 @@ import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2, MapPin, Briefcase } from "lucide-react";
+import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2, MapPin, Briefcase, Shirt } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -43,6 +43,7 @@ export default function RegistrationsPage() {
       "المحافظة",
       "الرياضة",
       "الاختيار",
+      "مقاس التيشرت",
       "النوع",
       "كود مايسترو",
       "الرقم القومي",
@@ -64,6 +65,7 @@ export default function RegistrationsPage() {
           `"${reg.governorate || ''}"`,
           `"${sportLabel}"`,
           `"${reg.sportOption}"`,
+          `"${reg.tShirtSize || '-'}"`,
           `"${genderLabel}"`,
           `"${reg.maestroCode}"`,
           `"${reg.nationalId}"`,
@@ -131,6 +133,7 @@ export default function RegistrationsPage() {
                       <TableHead className="text-right">المسمى الوظيفي</TableHead>
                       <TableHead className="text-right">المحافظة</TableHead>
                       <TableHead className="text-right">الرياضة</TableHead>
+                      <TableHead className="text-right">المقاس</TableHead>
                       <TableHead className="text-right">النوع</TableHead>
                       <TableHead className="text-right">كود مايسترو</TableHead>
                       <TableHead className="text-center">إجراءات</TableHead>
@@ -147,6 +150,13 @@ export default function RegistrationsPage() {
                           <Badge variant="secondary">
                             {reg.sport === 'football' ? 'كرة قدم' : reg.sport === 'penalty' ? 'ضربات جزاء' : 'جري'}
                           </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {reg.tShirtSize ? (
+                            <Badge variant="outline" className="gap-1">
+                              <Shirt className="w-3 h-3" /> {reg.tShirtSize}
+                            </Badge>
+                          ) : '-'}
                         </TableCell>
                         <TableCell>{reg.gender === 'male' ? 'رجال' : 'سيدات'}</TableCell>
                         <TableCell className="font-mono text-xs">{reg.maestroCode}</TableCell>

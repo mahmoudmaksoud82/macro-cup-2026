@@ -15,6 +15,8 @@ export const GOVERNORATES = [
   "مطروح", "قنا", "شمال سيناء", "سوهاج", "بني سويف", "الأقصر", "أسوان", "أسيوط"
 ];
 
+export const T_SHIRT_SIZES = ["L", "XL", "2XL"];
+
 export type SportType = 'running' | 'football' | 'penalty';
 export type GenderType = 'male' | 'female';
 
@@ -30,5 +32,6 @@ export interface Registration {
     gender: GenderType;
     sport: SportType;
     sportOption: string;
+    tShirtSize?: string;
     createdAt: any;
 }

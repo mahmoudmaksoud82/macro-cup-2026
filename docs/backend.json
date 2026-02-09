@@ -50,6 +50,11 @@
         "sportOption": {
           "type": "string",
           "description": "The specific option chosen for the sport (e.g., football team name)."
+        },
+        "tShirtSize": {
+          "type": "string",
+          "description": "The T-shirt size for football players (L, XL, 2XL).",
+          "enum": ["L", "XL", "2XL"]
         }
       },
       "required": [
@@ -82,7 +87,7 @@
           "schema": {
             "$ref": "#/backend/entities/Registration"
           },
-          "description": "Stores user registration data for sports. Includes job title and governorate information.",
+          "description": "Stores user registration data for sports. Includes job title, governorate, and t-shirt size for football.",
           "params": [
             {
               "name": "registrationId",
@@ -92,6 +97,6 @@
         }
       }
     ],
-    "reasoning": "Data structure stores comprehensive registration info including job titles and governorates."
+    "reasoning": "Data structure stores comprehensive registration info including job titles, governorates, and sports-specific options like t-shirt sizes."
   }
 }
