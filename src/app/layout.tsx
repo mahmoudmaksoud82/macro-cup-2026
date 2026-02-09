@@ -13,7 +13,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // نستخدم الصورة المحددة في المجلد العام public
+  // استخدام الصورة الموجودة في مجلد public
   const backgroundImage = '/background.jpg';
 
   return (
@@ -36,8 +36,8 @@ export default function RootLayout({
               className="object-cover"
               sizes="100vw"
             />
-            {/* طبقة تظليل خفيفة جداً لتحسين قراءة النصوص */}
-            <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px]" />
+            {/* طبقة تظليل خفيفة لتحسين قراءة النصوص فوق الخلفية */}
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
           </div>
           
           {/* منطقة المحتوى الرئيسية */}
