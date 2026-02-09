@@ -7,7 +7,7 @@ import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2, MapPin, Briefcase, Shirt } from "lucide-react";
+import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2, Shirt, Clock } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -33,6 +33,19 @@ export default function RegistrationsPage() {
     }
   };
 
+  const formatDateTime = (createdAt: any) => {
+    if (!createdAt) return "-";
+    // Firestore Timestamp conversion
+    const date = createdAt.toDate ? createdAt.toDate() : new Date(createdAt);
+    return date.toLocaleString('ar-EG', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   const downloadExcel = () => {
     if (!registrations || registrations.length === 0) return;
 
@@ -56,7 +69,7 @@ export default function RegistrationsPage() {
       ...registrations.map(reg => {
         const sportLabel = reg.sport === 'football' ? 'كرة قدم' : reg.sport === 'penalty' ? 'ضربات جزاء' : 'جري';
         const genderLabel = reg.gender === 'male' ? 'رجال' : 'سيدات';
-        const date = reg.createdAt?.toDate ? reg.createdAt.toDate().toLocaleString('ar-EG') : '';
+        const dateStr = reg.createdAt?.toDate ? reg.createdAt.toDate().toLocaleString('ar-EG') : '';
         
         return [
           `"${reg.name}"`,
@@ -70,7 +83,7 @@ export default function RegistrationsPage() {
           `"${reg.maestroCode}"`,
           `"${reg.nationalId}"`,
           `"${reg.contact}"`,
-          `"${date}"`
+          `"${dateStr}"`
         ].join(",");
       })
     ];
@@ -134,8 +147,8 @@ export default function RegistrationsPage() {
                       <TableHead className="text-right">المحافظة</TableHead>
                       <TableHead className="text-right">الرياضة</TableHead>
                       <TableHead className="text-right">المقاس</TableHead>
-                      <TableHead className="text-right">النوع</TableHead>
                       <TableHead className="text-right">كود مايسترو</TableHead>
+                      <TableHead className="text-right">وقت التسجيل</TableHead>
                       <TableHead className="text-center">إجراءات</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -158,8 +171,13 @@ export default function RegistrationsPage() {
                             </Badge>
                           ) : '-'}
                         </TableCell>
-                        <TableCell>{reg.gender === 'male' ? 'رجال' : 'سيدات'}</TableCell>
                         <TableCell className="font-mono text-xs">{reg.maestroCode}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {formatDateTime(reg.createdAt)}
+                          </div>
+                        </TableCell>
                         <TableCell className="text-center">
                           <Button 
                             variant="ghost" 
