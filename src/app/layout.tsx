@@ -2,7 +2,6 @@ import type {Metadata} from 'next';
 import './globals.css';
 import Image from 'next/image';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export const metadata: Metadata = {
   title: 'Macro Cup 2026 - Registration',
@@ -14,8 +13,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // نستخدم الصورة المحددة في placeholder-images.json والتي تشير إلى Background.jpeg
-  const backgroundImage = '/Background.jpeg';
+  // نستخدم الصورة المحددة في المجلد العام public
+  const backgroundImage = '/background.jpg';
 
   return (
     <html lang="ar" dir="rtl" className="h-full">
@@ -37,7 +36,7 @@ export default function RootLayout({
               className="object-cover"
               sizes="100vw"
             />
-            {/* طبقة تظليل خفيفة جداً لتحسين قراءة النصوص دون حجب الصورة */}
+            {/* طبقة تظليل خفيفة جداً لتحسين قراءة النصوص */}
             <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px]" />
           </div>
           
