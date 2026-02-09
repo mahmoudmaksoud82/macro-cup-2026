@@ -55,6 +55,11 @@
           "type": "string",
           "description": "The T-shirt size for football players (L, XL, 2XL).",
           "enum": ["L", "XL", "2XL"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date and time when the registration was created automatically."
         }
       },
       "required": [
@@ -87,7 +92,7 @@
           "schema": {
             "$ref": "#/backend/entities/Registration"
           },
-          "description": "Stores user registration data for sports. Includes job title, governorate, and t-shirt size for football.",
+          "description": "Stores user registration data for sports. Includes job title, governorate, t-shirt size, and auto-generated timestamp.",
           "params": [
             {
               "name": "registrationId",
@@ -97,6 +102,6 @@
         }
       }
     ],
-    "reasoning": "Data structure stores comprehensive registration info including job titles, governorates, and sports-specific options like t-shirt sizes."
+    "reasoning": "Data structure stores comprehensive registration info including job titles, governorates, sports-specific options, and precise registration timestamps."
   }
 }

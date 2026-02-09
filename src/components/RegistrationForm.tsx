@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FOOTBALL_OPTIONS, GOVERNORATES, T_SHIRT_SIZES, GenderType, SportType, Registration } from "@/lib/sports";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle2, AlertCircle, Info, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin, Briefcase, Shirt } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin, Briefcase, Shirt } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useAuth, useUser, useCollection } from "@/firebase";
 import { collection, doc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
@@ -84,6 +84,7 @@ export default function RegistrationForm() {
     setIsSubmitting(true);
     setStatus(null);
 
+    // Check for unique Maestro Code
     const maestroQuery = query(collection(firestore, "registrations"), where("maestroCode", "==", data.maestroCode));
     const maestroSnapshot = await getDocs(maestroQuery);
     
@@ -93,6 +94,7 @@ export default function RegistrationForm() {
       return;
     }
 
+    // Check for sport option availability (Football only)
     if (data.sport === 'football' && usedOptions.includes(data.sportOption!)) {
       setStatus({ type: 'error', message: "هذا الاختيار تم حجزه بالفعل، يرجى اختيار عنصر آخر." });
       setIsSubmitting(false);
@@ -103,12 +105,14 @@ export default function RegistrationForm() {
     const finalData = {
       ...data,
       id: registrationId,
-      createdAt: serverTimestamp(),
+      createdAt: serverTimestamp(), // Added automatically here
     };
 
     setDocumentNonBlocking(doc(firestore, "registrations", registrationId), finalData, { merge: true });
     
     setStatus({ type: 'success', message: "تم التسجيل بنجاح!" });
+    
+    // Reset state
     setGender("");
     setSport("");
     setGovernorate("");
