@@ -4,18 +4,17 @@
 
 @layer base {
   :root {
-    /* جعل الخلفية شفافة تماماً لرؤية الصورة خلفها */
-    --background: 0 0% 100% / 0;
+    --background: 0 0% 100%;
     --foreground: 186 100% 5%;
-    --card: 0 0% 100% / 0.9;
+    --card: 0 0% 100%;
     --card-foreground: 186 100% 5%;
-    --popover: 0 0% 100% / 0.95;
+    --popover: 0 0% 100%;
     --popover-foreground: 186 100% 5%;
     --primary: 186 100% 26%;
     --primary-foreground: 210 100% 98%;
-    --secondary: 186 76% 95% / 0.8;
+    --secondary: 186 76% 95%;
     --secondary-foreground: 186 100% 26%;
-    --muted: 210 20% 90% / 0.8;
+    --muted: 210 20% 90%;
     --muted-foreground: 186 20% 40%;
     --accent: 186 76% 53%;
     --accent-foreground: 210 100% 98%;
@@ -34,10 +33,9 @@
   }
   html, body {
     @apply h-full w-full m-0 p-0;
-    background-color: transparent !important;
   }
   body {
-    @apply text-foreground font-body antialiased;
+    @apply text-foreground font-body antialiased bg-background;
   }
 }
 
