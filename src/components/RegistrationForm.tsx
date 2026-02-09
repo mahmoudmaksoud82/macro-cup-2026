@@ -12,12 +12,11 @@ import { FOOTBALL_OPTIONS, GOVERNORATES, T_SHIRT_SIZES, GenderType, SportType, R
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2, AlertCircle, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin, Briefcase, Shirt } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useFirestore, useAuth, useUser, useCollection } from "@/firebase";
+import { useFirestore, useUser, useCollection } from "@/firebase";
 import { collection, doc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login";
 import { useMemoFirebase, useAuth as useAuthInstance } from "@/firebase/provider";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function RegistrationForm() {
   const { toast } = useToast();
@@ -125,19 +124,19 @@ export default function RegistrationForm() {
   };
 
   const availableFootballOptions = FOOTBALL_OPTIONS.filter(opt => !usedOptions.includes(opt));
-  const cardBgImage = PlaceHolderImages.find(img => img.id === "app-background")?.imageUrl || "/background.png";
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* صورة الخلفية في الركن العلوي الأيسر */}
-      <div className="absolute top-0 left-0 w-32 h-32 opacity-10 pointer-events-none z-0">
+      {/* صورة الخلفية في الركن العلوي الأيسر كما في التحديد */}
+      <div className="absolute top-4 left-4 w-40 h-40 pointer-events-none z-0">
         <Image 
-          src={cardBgImage}
+          src="/background.png"
           alt="decoration"
-          width={128}
-          height={128}
+          width={160}
+          height={160}
           className="object-contain"
           priority
+          quality={100}
         />
       </div>
 
