@@ -25,9 +25,9 @@ export default function RootLayout({
       </head>
       <body className="font-body min-h-screen relative m-0 p-0 overflow-x-hidden bg-transparent">
         <FirebaseClientProvider>
-          {/* طبقة الخلفية - ثابتة وتحتوي على الصورة بحجمها الكامل ومزاحة لليسار */}
-          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none bg-white flex items-center justify-start">
-            <div className="relative w-full h-full scale-100 transition-transform duration-500 origin-left">
+          {/* طبقة الخلفية - ثابتة ومزاحة لليمين بنسبة بسيطة */}
+          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none bg-white flex items-center justify-start overflow-hidden">
+            <div className="relative w-full h-full scale-100 transition-transform duration-500 origin-left translate-x-[5%]">
               <Image
                 src={backgroundImage}
                 alt="App Background"
