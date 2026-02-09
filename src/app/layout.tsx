@@ -1,4 +1,3 @@
-
 import type {Metadata} from 'next';
 import './globals.css';
 import Image from 'next/image';
@@ -16,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // نستخدم الصورة المحددة في placeholder-images.json والتي تشير إلى Background.jpeg
-  const backgroundImage = PlaceHolderImages.find(img => img.id === 'app-background')?.imageUrl || '/Background.jpeg';
+  const backgroundImage = '/Background.jpeg';
 
   return (
     <html lang="ar" dir="rtl" className="h-full">
@@ -27,7 +26,7 @@ export default function RootLayout({
       </head>
       <body className="font-body min-h-screen relative m-0 p-0 overflow-x-hidden bg-transparent">
         <FirebaseClientProvider>
-          {/* طبقة الخلفية - ثابتة في الأسفل وممتدة بالكامل */}
+          {/* طبقة الخلفية - ثابتة وممتدة بالكامل */}
           <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none">
             <Image
               src={backgroundImage}
@@ -38,8 +37,8 @@ export default function RootLayout({
               className="object-cover"
               sizes="100vw"
             />
-            {/* طبقة تظليل خفيفة لتحسين قراءة النصوص */}
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
+            {/* طبقة تظليل خفيفة جداً لتحسين قراءة النصوص دون حجب الصورة */}
+            <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px]" />
           </div>
           
           {/* منطقة المحتوى الرئيسية */}
