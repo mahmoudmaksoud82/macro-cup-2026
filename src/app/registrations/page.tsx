@@ -7,10 +7,11 @@ import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2, MapPin } from "lucide-react";
+import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2, MapPin, Briefcase } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { Registration } from "@/lib/sports";
 
 export default function RegistrationsPage() {
   const firestore = useFirestore();
@@ -20,7 +21,7 @@ export default function RegistrationsPage() {
     return query(collection(firestore, "registrations"), orderBy("createdAt", "desc"));
   }, [firestore]);
 
-  const { data: registrations, isLoading } = useCollection(q);
+  const { data: registrations, isLoading } = useCollection<Registration>(q);
 
   const handleDelete = (id: string, name: string) => {
     if (confirm(`هل أنت متأكد من حذف تسجيل "${name}"؟`)) {
@@ -38,6 +39,7 @@ export default function RegistrationsPage() {
     const headers = [
       "الاسم",
       "الإدارة",
+      "المسمى الوظيفي",
       "المحافظة",
       "الرياضة",
       "الاختيار",
@@ -58,6 +60,7 @@ export default function RegistrationsPage() {
         return [
           `"${reg.name}"`,
           `"${reg.department}"`,
+          `"${reg.jobTitle || ''}"`,
           `"${reg.governorate || ''}"`,
           `"${sportLabel}"`,
           `"${reg.sportOption}"`,
@@ -125,6 +128,7 @@ export default function RegistrationsPage() {
                     <TableRow>
                       <TableHead className="text-right">الاسم</TableHead>
                       <TableHead className="text-right">الإدارة</TableHead>
+                      <TableHead className="text-right">المسمى الوظيفي</TableHead>
                       <TableHead className="text-right">المحافظة</TableHead>
                       <TableHead className="text-right">الرياضة</TableHead>
                       <TableHead className="text-right">النوع</TableHead>
@@ -137,6 +141,7 @@ export default function RegistrationsPage() {
                       <TableRow key={reg.id}>
                         <TableCell className="font-medium">{reg.name}</TableCell>
                         <TableCell>{reg.department}</TableCell>
+                        <TableCell>{reg.jobTitle}</TableCell>
                         <TableCell>{reg.governorate}</TableCell>
                         <TableCell>
                           <Badge variant="secondary">

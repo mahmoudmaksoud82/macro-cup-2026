@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { FOOTBALL_OPTIONS, GOVERNORATES, GenderType, SportType } from "@/lib/sports";
+import { FOOTBALL_OPTIONS, GOVERNORATES, GenderType, SportType, Registration } from "@/lib/sports";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle2, AlertCircle, Info, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin } from "lucide-react";
+import { CheckCircle2, AlertCircle, Info, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin, Briefcase } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useAuth, useUser, useCollection } from "@/firebase";
 import { collection, doc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
@@ -57,6 +57,7 @@ export default function RegistrationForm() {
     const data = {
       name: formData.get("name")?.toString() || "",
       department: formData.get("department")?.toString() || "",
+      jobTitle: formData.get("jobTitle")?.toString() || "",
       governorate: governorate,
       maestroCode: formData.get("maestroCode")?.toString() || "",
       nationalId: formData.get("nationalId")?.toString() || "",
@@ -146,6 +147,13 @@ export default function RegistrationForm() {
                 <Building2 className="w-4 h-4 text-accent" /> الإدارة
               </Label>
               <Input id="department" name="department" required placeholder="اسم الإدارة التابع لها" className="transition-all focus:ring-2 focus:ring-primary/20" />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="jobTitle" className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-accent" /> المسمى الوظيفي
+              </Label>
+              <Input id="jobTitle" name="jobTitle" required placeholder="أدخل مسمّاك الوظيفي" className="transition-all focus:ring-2 focus:ring-primary/20" />
             </div>
 
             <div className="space-y-2">

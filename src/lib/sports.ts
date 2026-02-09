@@ -22,6 +22,7 @@ export interface Registration {
     id: string;
     name: string;
     department: string;
+    jobTitle: string;
     governorate: string;
     maestroCode: string;
     nationalId: string;
