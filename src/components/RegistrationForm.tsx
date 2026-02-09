@@ -91,14 +91,12 @@ export default function RegistrationForm() {
     setIsSubmitting(true);
     setStatus(null);
 
-    // Specific validation for Penalty sport capacity
     if (data.sport === 'penalty' && isPenaltyFull) {
       setStatus({ type: 'error', message: "عذراً، اكتمل العدد في رياضة ضربات الجزاء." });
       setIsSubmitting(false);
       return;
     }
 
-    // Check for unique Maestro Code
     const maestroQuery = query(collection(firestore, "registrations"), where("maestroCode", "==", data.maestroCode));
     const maestroSnapshot = await getDocs(maestroQuery);
     
@@ -108,7 +106,6 @@ export default function RegistrationForm() {
       return;
     }
 
-    // Check for sport option availability (Football only)
     if (data.sport === 'football' && usedOptions.includes(data.sportOption!)) {
       setStatus({ type: 'error', message: "هذا الاختيار تم حجزه بالفعل، يرجى اختيار عنصر آخر." });
       setIsSubmitting(false);
@@ -126,7 +123,6 @@ export default function RegistrationForm() {
     
     setStatus({ type: 'success', message: "تم التسجيل بنجاح!" });
     
-    // Reset state
     setGender("");
     setSport("");
     setGovernorate("");
@@ -140,9 +136,10 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      <div className="absolute top-[-60px] left-10 w-[230px] h-[230px] pointer-events-none z-0">
+      {/* استبدال background.png بـ rit.jpeg */}
+      <div className="absolute top-[-90px] left-10 w-[230px] h-[230px] pointer-events-none z-0">
         <Image 
-          src="/background.png"
+          src="/rit.jpeg"
           alt="decoration"
           width={230}
           height={230}
