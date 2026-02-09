@@ -127,13 +127,13 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* صورة الخلفية في الركن العلوي الأيسر كما في التحديد */}
-      <div className="absolute top-4 left-4 w-40 h-40 pointer-events-none z-0">
+      {/* الصورة الزخرفية - تم تكبيرها بنسبة 20% وإزاحتها لليمين قليلاً (left-10 بدلاً من left-4) */}
+      <div className="absolute top-4 left-10 w-[192px] h-[192px] pointer-events-none z-0">
         <Image 
           src="/background.png"
           alt="decoration"
-          width={160}
-          height={160}
+          width={192}
+          height={192}
           className="object-contain"
           priority
           quality={100}
