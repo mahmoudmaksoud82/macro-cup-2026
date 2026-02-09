@@ -27,7 +27,7 @@ export default function RootLayout({
         <FirebaseClientProvider>
           {/* طبقة الخلفية - ثابتة وتحتوي على الصورة مصغرة ومزاحة لليسار */}
           <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none bg-white flex items-center justify-start">
-            <div className="relative w-full h-full scale-[0.8] transition-transform duration-500 origin-left">
+            <div className="relative w-full h-full scale-[0.9] transition-transform duration-500 origin-left">
               <Image
                 src={backgroundImage}
                 alt="App Background"
