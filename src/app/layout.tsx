@@ -13,7 +13,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // استخدام الصورة الموجودة في مجلد public
+  // اسم الصورة الجديد كما تم تحديده
   const backgroundImage = '/background.png';
 
   return (
@@ -25,19 +25,19 @@ export default function RootLayout({
       </head>
       <body className="font-body min-h-screen relative m-0 p-0 overflow-x-hidden bg-transparent">
         <FirebaseClientProvider>
-          {/* طبقة الخلفية - ثابتة وممتدة بالكامل ولكن الصورة بداخلها بحجمها الطبيعي */}
-          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none bg-white">
+          {/* طبقة الخلفية - ثابتة وتحتوي على الصورة بحجمها الطبيعي */}
+          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none bg-white flex items-center justify-center">
             <Image
               src={backgroundImage}
               alt="App Background"
               fill
               priority
               quality={100}
-              className="object-none" // تظهر الصورة بحجمها الطبيعي دون تمديد
+              className="object-none" // تظهر الصورة بحجمها الطبيعي دون تمديد في المنتصف
               sizes="100vw"
             />
-            {/* طبقة تظليل خفيفة جداً اختيارية */}
-            <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px]" />
+            {/* طبقة تظليل خفيفة اختيارية لزيادة وضوح النص */}
+            <div className="absolute inset-0 bg-white/10" />
           </div>
           
           {/* منطقة المحتوى الرئيسية */}
