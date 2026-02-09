@@ -25,19 +25,19 @@ export default function RootLayout({
       </head>
       <body className="font-body min-h-screen relative m-0 p-0 overflow-x-hidden bg-transparent">
         <FirebaseClientProvider>
-          {/* طبقة الخلفية - ثابتة وتحتوي على الصورة بحجمها الطبيعي */}
-          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none bg-white flex items-center justify-center">
+          {/* طبقة الخلفية - ثابتة وتحتوي على الصورة ممتدة بالكامل */}
+          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none bg-white">
             <Image
               src={backgroundImage}
               alt="App Background"
               fill
               priority
               quality={100}
-              className="object-none" // تظهر الصورة بحجمها الطبيعي دون تمديد في المنتصف
+              className="object-cover" // تمدد الصورة لتغطية المساحة بالكامل
               sizes="100vw"
             />
             {/* طبقة تظليل خفيفة اختيارية لزيادة وضوح النص */}
-            <div className="absolute inset-0 bg-white/10" />
+            <div className="absolute inset-0 bg-white/5" />
           </div>
           
           {/* منطقة المحتوى الرئيسية */}
