@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,12 +16,13 @@ import { useFirestore, useAuth, useUser, useCollection } from "@/firebase";
 import { collection, doc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login";
-import { useMemoFirebase } from "@/firebase/provider";
+import { useMemoFirebase, useAuth as useAuthInstance } from "@/firebase/provider";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function RegistrationForm() {
   const { toast } = useToast();
   const firestore = useFirestore();
-  const auth = useAuth();
+  const auth = useAuthInstance();
   const { user, isUserLoading } = useUser();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -105,7 +107,7 @@ export default function RegistrationForm() {
     const finalData = {
       ...data,
       id: registrationId,
-      createdAt: serverTimestamp(), // Added automatically here
+      createdAt: serverTimestamp(),
     };
 
     setDocumentNonBlocking(doc(firestore, "registrations", registrationId), finalData, { merge: true });
@@ -123,10 +125,23 @@ export default function RegistrationForm() {
   };
 
   const availableFootballOptions = FOOTBALL_OPTIONS.filter(opt => !usedOptions.includes(opt));
+  const cardBgImage = PlaceHolderImages.find(img => img.id === "app-background")?.imageUrl || "/background.png";
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95">
-      <CardHeader className="text-center">
+    <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
+      {/* صورة الخلفية في الركن العلوي الأيسر */}
+      <div className="absolute top-0 left-0 w-32 h-32 opacity-10 pointer-events-none z-0">
+        <Image 
+          src={cardBgImage}
+          alt="decoration"
+          width={128}
+          height={128}
+          className="object-contain"
+          priority
+        />
+      </div>
+
+      <CardHeader className="text-center relative z-10">
         <div className="flex justify-center mb-4">
           <div className="p-3 bg-primary/10 rounded-full">
             <Trophy className="w-10 h-10 text-primary" />
@@ -138,7 +153,7 @@ export default function RegistrationForm() {
         </CardDescription>
       </CardHeader>
       
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="relative z-10">
         <CardContent className="space-y-6">
           {status && (
             <Alert variant={status.type === 'error' ? 'destructive' : 'default'} className={status.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : ''}>
@@ -153,21 +168,21 @@ export default function RegistrationForm() {
               <Label htmlFor="name" className="flex items-center gap-2">
                 <User className="w-4 h-4 text-accent" /> الاسم بالكامل
               </Label>
-              <Input id="name" name="name" required placeholder="أدخل اسمك الثلاثي" className="transition-all focus:ring-2 focus:ring-primary/20" />
+              <Input id="name" name="name" required placeholder="أدخل اسمك الثلاثي" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="department" className="flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-accent" /> الإدارة
               </Label>
-              <Input id="department" name="department" required placeholder="اسم الإدارة التابع لها" className="transition-all focus:ring-2 focus:ring-primary/20" />
+              <Input id="department" name="department" required placeholder="اسم الإدارة التابع لها" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="jobTitle" className="flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-accent" /> المسمى الوظيفي
               </Label>
-              <Input id="jobTitle" name="jobTitle" required placeholder="أدخل مسمّاك الوظيفي" className="transition-all focus:ring-2 focus:ring-primary/20" />
+              <Input id="jobTitle" name="jobTitle" required placeholder="أدخل مسمّاك الوظيفي" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
@@ -175,7 +190,7 @@ export default function RegistrationForm() {
                 <MapPin className="w-4 h-4 text-accent" /> المحافظة
               </Label>
               <Select value={governorate} onValueChange={setGovernorate} required>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white/50">
                   <SelectValue placeholder="اختر المحافظة" />
                 </SelectTrigger>
                 <SelectContent>
@@ -190,21 +205,21 @@ export default function RegistrationForm() {
               <Label htmlFor="maestroCode" className="flex items-center gap-2">
                 <Hash className="w-4 h-4 text-accent" /> كود مايسترو
               </Label>
-              <Input id="maestroCode" name="maestroCode" required placeholder="كود التعريف الخاص بك" className="transition-all focus:ring-2 focus:ring-primary/20" />
+              <Input id="maestroCode" name="maestroCode" required placeholder="كود التعريف الخاص بك" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="nationalId" className="flex items-center gap-2">
                 <Hash className="w-4 h-4 text-accent" /> الرقم القومي
               </Label>
-              <Input id="nationalId" name="nationalId" required placeholder="14 رقم" maxLength={14} className="transition-all focus:ring-2 focus:ring-primary/20" />
+              <Input id="nationalId" name="nationalId" required placeholder="14 رقم" maxLength={14} className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="contact" className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent" /> رقم التواصل
               </Label>
-              <Input id="contact" name="contact" required placeholder="رقم الهاتف" className="transition-all focus:ring-2 focus:ring-primary/20" />
+              <Input id="contact" name="contact" required placeholder="رقم الهاتف" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
@@ -212,7 +227,7 @@ export default function RegistrationForm() {
                 <Users className="w-4 h-4 text-accent" /> النوع
               </Label>
               <Select name="gender" required onValueChange={(val) => setGender(val as GenderType)}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white/50">
                   <SelectValue placeholder="اختر النوع" />
                 </SelectTrigger>
                 <SelectContent>
@@ -227,7 +242,7 @@ export default function RegistrationForm() {
                 <Trophy className="w-4 h-4 text-accent" /> الرياضة
               </Label>
               <Select name="sport" required onValueChange={(val) => setSport(val as SportType)}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white/50">
                   <SelectValue placeholder="اختر الرياضة" />
                 </SelectTrigger>
                 <SelectContent>
@@ -243,7 +258,7 @@ export default function RegistrationForm() {
                 <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                   <Label className="flex items-center gap-2">الاختيار (كرة قدم)</Label>
                   <Select name="sportOption" required onValueChange={setSportOption}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-white/50">
                       <SelectValue placeholder="اختر الاختيار المتاح" />
                     </SelectTrigger>
                     <SelectContent className="max-h-60">
@@ -258,7 +273,7 @@ export default function RegistrationForm() {
                     <Shirt className="w-4 h-4 text-accent" /> مقاس التيشرت
                   </Label>
                   <Select value={tShirtSize} onValueChange={setTShirtSize} required>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-white/50">
                       <SelectValue placeholder="اختر المقاس" />
                     </SelectTrigger>
                     <SelectContent>
