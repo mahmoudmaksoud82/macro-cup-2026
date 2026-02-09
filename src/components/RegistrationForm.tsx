@@ -136,8 +136,8 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* تم تعديل الموضع: تم خفض الصورة (top من -70px إلى -30px) وتحريكها يساراً (left من 4 إلى -40px) */}
-      <div className="absolute top-[-30px] left-[-40px] w-[230px] h-[230px] pointer-events-none z-0">
+      {/* تم تعديل الموضع: خفض الصورة (top من -30px إلى -10px) */}
+      <div className="absolute top-[-10px] left-[-40px] w-[230px] h-[230px] pointer-events-none z-0">
         <Image 
           src="/rit.jpeg"
           alt="decoration"
