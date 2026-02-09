@@ -15,9 +15,9 @@
     },
     {
       "id": "app-background",
-      "description": "Macro Cup Background",
-      "imageUrl": "https://images.unsplash.com/photo-1551958219-acbc608c6377?q=80&w=2070&auto=format&fit=crop",
-      "imageHint": "sports stadium"
+      "description": "Macro Cup Custom Background",
+      "imageUrl": "/Background.jpeg",
+      "imageHint": "sports background"
     }
   ]
 }

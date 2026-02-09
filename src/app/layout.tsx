@@ -15,7 +15,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const backgroundImage = PlaceHolderImages.find(img => img.id === 'app-background')?.imageUrl || '';
+  // نستخدم الصورة المحددة في placeholder-images.json والتي تشير إلى Background.jpeg
+  const backgroundImage = PlaceHolderImages.find(img => img.id === 'app-background')?.imageUrl || '/Background.jpeg';
 
   return (
     <html lang="ar" dir="rtl" className="h-full">
@@ -26,24 +27,22 @@ export default function RootLayout({
       </head>
       <body className="font-body min-h-screen relative m-0 p-0 overflow-x-hidden bg-transparent">
         <FirebaseClientProvider>
-          {/* Background Layer - Fixed and at the bottom */}
-          {backgroundImage && (
-            <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none">
-              <Image
-                src={backgroundImage}
-                alt="App Background"
-                fill
-                priority
-                quality={100}
-                className="object-cover opacity-40"
-                sizes="100vw"
-                data-ai-hint="sports stadium"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-white/10" />
-            </div>
-          )}
+          {/* طبقة الخلفية - ثابتة في الأسفل وممتدة بالكامل */}
+          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none">
+            <Image
+              src={backgroundImage}
+              alt="App Background"
+              fill
+              priority
+              quality={100}
+              className="object-cover"
+              sizes="100vw"
+            />
+            {/* طبقة تظليل خفيفة لتحسين قراءة النصوص */}
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
+          </div>
           
-          {/* Main Content Area - Relative and above background */}
+          {/* منطقة المحتوى الرئيسية */}
           <div className="relative z-0 min-h-screen w-full">
             {children}
           </div>
