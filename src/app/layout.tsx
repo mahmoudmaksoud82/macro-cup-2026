@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import Image from 'next/image';
@@ -20,22 +21,23 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body min-h-screen relative">
+      <body className="font-body min-h-screen relative m-0 p-0 overflow-x-hidden">
         <FirebaseClientProvider>
-          {/* Full Stretch Fixed Background Wrapper */}
-          <div className="fixed inset-0 -z-50 w-full h-full overflow-hidden">
+          {/* Background Layer - Fixed and at the bottom */}
+          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none">
             <Image
               src="/Background.jpeg"
               alt="App Background"
               fill
-              className="object-cover"
               priority
               quality={100}
+              className="object-cover"
+              sizes="100vw"
             />
           </div>
           
-          {/* Main Content Area */}
-          <div className="relative z-10 w-full min-h-screen overflow-y-auto bg-transparent">
+          {/* Main Content Area - Relative and above background */}
+          <div className="relative z-0 min-h-screen w-full">
             {children}
           </div>
         </FirebaseClientProvider>
