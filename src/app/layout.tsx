@@ -1,4 +1,3 @@
-
 import type {Metadata} from 'next';
 import './globals.css';
 import Image from 'next/image';
@@ -26,19 +25,19 @@ export default function RootLayout({
       </head>
       <body className="font-body min-h-screen relative m-0 p-0 overflow-x-hidden bg-transparent">
         <FirebaseClientProvider>
-          {/* طبقة الخلفية - ثابتة وممتدة بالكامل */}
-          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none">
+          {/* طبقة الخلفية - ثابتة وممتدة بالكامل ولكن الصورة بداخلها بحجمها الطبيعي */}
+          <div className="fixed inset-0 w-full h-full -z-50 pointer-events-none bg-white">
             <Image
               src={backgroundImage}
               alt="App Background"
               fill
               priority
               quality={100}
-              className="object-cover"
+              className="object-none" // تظهر الصورة بحجمها الطبيعي دون تمديد
               sizes="100vw"
             />
-            {/* طبقة تظليل خفيفة لتحسين قراءة النصوص فوق الخلفية */}
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
+            {/* طبقة تظليل خفيفة جداً اختيارية */}
+            <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px]" />
           </div>
           
           {/* منطقة المحتوى الرئيسية */}
