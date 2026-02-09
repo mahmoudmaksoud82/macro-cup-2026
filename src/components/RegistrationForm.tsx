@@ -42,6 +42,12 @@ export default function RegistrationForm() {
     ? allRegistrations.filter(r => r.sport === 'football').map(r => r.sportOption)
     : [];
 
+  const penaltyCount = allRegistrations 
+    ? allRegistrations.filter(r => r.sport === 'penalty').length
+    : 0;
+
+  const isPenaltyFull = penaltyCount >= 32;
+
   useEffect(() => {
     if (!isUserLoading && !user) {
       initiateAnonymousSignIn(auth);
@@ -85,6 +91,13 @@ export default function RegistrationForm() {
     setIsSubmitting(true);
     setStatus(null);
 
+    // Specific validation for Penalty sport capacity
+    if (data.sport === 'penalty' && isPenaltyFull) {
+      setStatus({ type: 'error', message: "عذراً، اكتمل العدد في رياضة ضربات الجزاء." });
+      setIsSubmitting(false);
+      return;
+    }
+
     // Check for unique Maestro Code
     const maestroQuery = query(collection(firestore, "registrations"), where("maestroCode", "==", data.maestroCode));
     const maestroSnapshot = await getDocs(maestroQuery);
@@ -127,7 +140,6 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* الصورة الزخرفية - تم رفعها للأعلى أكثر باستخدام top-[-60px] */}
       <div className="absolute top-[-60px] left-10 w-[230px] h-[230px] pointer-events-none z-0">
         <Image 
           src="/background.png"
@@ -240,14 +252,18 @@ export default function RegistrationForm() {
               <Label className="flex items-center gap-2">
                 <Trophy className="w-4 h-4 text-accent" /> الرياضة
               </Label>
-              <Select name="sport" required onValueChange={(val) => setSport(val as SportType)}>
+              <Select name="sport" value={sport} required onValueChange={(val) => setSport(val as SportType)}>
                 <SelectTrigger className="bg-white/50">
                   <SelectValue placeholder="اختر الرياضة" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="running">رياضة الجري (للجميع)</SelectItem>
                   {gender === 'male' && <SelectItem value="football">كرة قدم (رجال فقط)</SelectItem>}
-                  {gender === 'female' && <SelectItem value="penalty">ضربات جزاء (سيدات فقط)</SelectItem>}
+                  {gender === 'female' && (
+                    <SelectItem value="penalty" disabled={isPenaltyFull}>
+                      ضربات جزاء (سيدات فقط) {isPenaltyFull && "- اكتمل العدد"}
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
