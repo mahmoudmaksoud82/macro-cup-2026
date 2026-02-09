@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useFirestore, useCollection, deleteDocumentNonBlocking } from "@/firebase";
@@ -6,7 +7,7 @@ import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2 } from "lucide-react";
+import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -34,10 +35,10 @@ export default function RegistrationsPage() {
   const downloadExcel = () => {
     if (!registrations || registrations.length === 0) return;
 
-    // تهيئة العناوين
     const headers = [
       "الاسم",
       "الإدارة",
+      "المحافظة",
       "الرياضة",
       "الاختيار",
       "النوع",
@@ -47,9 +48,8 @@ export default function RegistrationsPage() {
       "تاريخ التسجيل"
     ];
 
-    // تحويل البيانات إلى صفوف CSV
     const csvRows = [
-      headers.join(","), // الصف الأول هو العناوين
+      headers.join(","),
       ...registrations.map(reg => {
         const sportLabel = reg.sport === 'football' ? 'كرة قدم' : reg.sport === 'penalty' ? 'ضربات جزاء' : 'جري';
         const genderLabel = reg.gender === 'male' ? 'رجال' : 'سيدات';
@@ -58,6 +58,7 @@ export default function RegistrationsPage() {
         return [
           `"${reg.name}"`,
           `"${reg.department}"`,
+          `"${reg.governorate || ''}"`,
           `"${sportLabel}"`,
           `"${reg.sportOption}"`,
           `"${genderLabel}"`,
@@ -69,7 +70,7 @@ export default function RegistrationsPage() {
       })
     ];
 
-    const csvContent = "\ufeff" + csvRows.join("\n"); // إضافة BOM لضمان دعم اللغة العربية في إكسل
+    const csvContent = "\ufeff" + csvRows.join("\n");
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -124,8 +125,8 @@ export default function RegistrationsPage() {
                     <TableRow>
                       <TableHead className="text-right">الاسم</TableHead>
                       <TableHead className="text-right">الإدارة</TableHead>
+                      <TableHead className="text-right">المحافظة</TableHead>
                       <TableHead className="text-right">الرياضة</TableHead>
-                      <TableHead className="text-right">الاختيار</TableHead>
                       <TableHead className="text-right">النوع</TableHead>
                       <TableHead className="text-right">كود مايسترو</TableHead>
                       <TableHead className="text-center">إجراءات</TableHead>
@@ -136,12 +137,12 @@ export default function RegistrationsPage() {
                       <TableRow key={reg.id}>
                         <TableCell className="font-medium">{reg.name}</TableCell>
                         <TableCell>{reg.department}</TableCell>
+                        <TableCell>{reg.governorate}</TableCell>
                         <TableCell>
                           <Badge variant="secondary">
                             {reg.sport === 'football' ? 'كرة قدم' : reg.sport === 'penalty' ? 'ضربات جزاء' : 'جري'}
                           </Badge>
                         </TableCell>
-                        <TableCell>{reg.sportOption}</TableCell>
                         <TableCell>{reg.gender === 'male' ? 'رجال' : 'سيدات'}</TableCell>
                         <TableCell className="font-mono text-xs">{reg.maestroCode}</TableCell>
                         <TableCell className="text-center">

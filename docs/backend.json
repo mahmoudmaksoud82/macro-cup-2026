@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "Registration": {
@@ -17,6 +18,10 @@
         "department": {
           "type": "string",
           "description": "The department the registrant belongs to."
+        },
+        "governorate": {
+          "type": "string",
+          "description": "The governorate the registrant lives in."
         },
         "maestroCode": {
           "type": "string",
@@ -47,6 +52,7 @@
         "id",
         "name",
         "department",
+        "governorate",
         "maestroCode",
         "nationalId",
         "contact",
@@ -71,7 +77,7 @@
           "schema": {
             "$ref": "#/backend/entities/Registration"
           },
-          "description": "Stores user registration data for sports. Maestro code must be unique. Sport option must be unique.",
+          "description": "Stores user registration data for sports. Includes governorate information.",
           "params": [
             {
               "name": "registrationId",
@@ -81,6 +87,6 @@
         }
       }
     ],
-    "reasoning": "The Firestore data structure is designed to store user registration data for sports, ensuring uniqueness of Maestro codes and sport options. To maintain data integrity and enforce constraints (such as unique Maestro codes and sport options), the data is stored directly in a single collection. Since all documents in the `registrations` collection have identical security requirements (only validated and unique registration data), this approach adheres to the Structural Segregation principle. Authorization is managed at the application level through backend validation (PHP code). This prevents duplicate Maestro codes and ensures sport option availability which enforces the uniqueness requirements described in the user request. Although user-based authorization isn't explicitly enforced in the data structure, the server-side validation and uniqueness constraints are critically important to the applications expected behavior. The system relies on server-side checks to ensure data integrity and prevent conflicts, mirroring the logic in the original PHP code."
+    "reasoning": "Data structure stores comprehensive registration info including governorates. Enforces unique Maestro codes per registration."
   }
 }

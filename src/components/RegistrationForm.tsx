@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -6,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { FOOTBALL_OPTIONS, GenderType, SportType } from "@/lib/sports";
+import { FOOTBALL_OPTIONS, GOVERNORATES, GenderType, SportType } from "@/lib/sports";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle2, AlertCircle, Info, Loader2, Trophy, Users, Phone, Hash, Building2, User } from "lucide-react";
+import { CheckCircle2, AlertCircle, Info, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useAuth, useUser, useCollection } from "@/firebase";
 import { collection, doc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
@@ -24,11 +25,11 @@ export default function RegistrationForm() {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [gender, setGender] = useState<GenderType | "">("");
+  const [governorate, setGovernorate] = useState<string>("");
   const [sport, setSport] = useState<SportType | "">("");
   const [sportOption, setSportOption] = useState<string>("");
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
-  // Get all registrations to check for football options uniqueness
   const registrationsQuery = useMemoFirebase(() => {
     return query(collection(firestore, "registrations"));
   }, [firestore]);
@@ -56,6 +57,7 @@ export default function RegistrationForm() {
     const data = {
       name: formData.get("name")?.toString() || "",
       department: formData.get("department")?.toString() || "",
+      governorate: governorate,
       maestroCode: formData.get("maestroCode")?.toString() || "",
       nationalId: formData.get("nationalId")?.toString() || "",
       contact: formData.get("contact")?.toString() || "",
@@ -64,10 +66,14 @@ export default function RegistrationForm() {
       sportOption: sport === 'football' ? sportOption : sport,
     };
 
+    if (!data.governorate) {
+      setStatus({ type: 'error', message: "يرجى اختيار المحافظة." });
+      return;
+    }
+
     setIsSubmitting(true);
     setStatus(null);
 
-    // Uniqueness Checks
     const maestroQuery = query(collection(firestore, "registrations"), where("maestroCode", "==", data.maestroCode));
     const maestroSnapshot = await getDocs(maestroQuery);
     
@@ -95,6 +101,7 @@ export default function RegistrationForm() {
     setStatus({ type: 'success', message: "تم التسجيل بنجاح!" });
     setGender("");
     setSport("");
+    setGovernorate("");
     setSportOption("");
     (e.target as HTMLFormElement).reset();
     setIsSubmitting(false);
@@ -142,13 +149,26 @@ export default function RegistrationForm() {
             </div>
 
             <div className="space-y-2">
+              <Label className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-accent" /> المحافظة
+              </Label>
+              <Select value={governorate} onValueChange={setGovernorate} required>
+                <SelectTrigger>
+                  <SelectValue placeholder="اختر المحافظة" />
+                </SelectTrigger>
+                <SelectContent>
+                  {GOVERNORATES.map((gov) => (
+                    <SelectItem key={gov} value={gov}>{gov}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="maestroCode" className="flex items-center gap-2">
                 <Hash className="w-4 h-4 text-accent" /> كود مايسترو
               </Label>
               <Input id="maestroCode" name="maestroCode" required placeholder="كود التعريف الخاص بك" className="transition-all focus:ring-2 focus:ring-primary/20" />
-              <p className="text-[11px] text-muted-foreground flex items-center gap-1">
-                <Info className="w-3 h-3" /> يمكن التسجيل بهذا الكود مرة واحدة فقط.
-              </p>
             </div>
 
             <div className="space-y-2">
@@ -198,9 +218,7 @@ export default function RegistrationForm() {
 
             {sport === 'football' && (
               <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                <Label className="flex items-center gap-2">
-                  الاختيار (كرة قدم)
-                </Label>
+                <Label className="flex items-center gap-2">الاختيار (كرة قدم)</Label>
                 <Select name="sportOption" required onValueChange={setSportOption}>
                   <SelectTrigger>
                     <SelectValue placeholder="اختر الاختيار المتاح" />
@@ -209,12 +227,8 @@ export default function RegistrationForm() {
                     {availableFootballOptions.map((opt) => (
                       <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                     ))}
-                    {availableFootballOptions.length === 0 && (
-                      <p className="p-2 text-sm text-center text-muted-foreground">لا توجد خيارات متاحة حالياً</p>
-                    )}
                   </SelectContent>
                 </Select>
-                <p className="text-[11px] text-muted-foreground">الاختيارات تختفي تلقائياً بعد حجزها.</p>
               </div>
             )}
           </div>
@@ -225,14 +239,7 @@ export default function RegistrationForm() {
             className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 transition-all shadow-lg" 
             disabled={isSubmitting || isUserLoading}
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                جاري التسجيل...
-              </>
-            ) : (
-              "تأكيد التسجيل"
-            )}
+            {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> جاري التسجيل...</> : "تأكيد التسجيل"}
           </Button>
         </CardFooter>
       </form>

@@ -8,6 +8,13 @@ export const FOOTBALL_OPTIONS = [
     "Vividol 6","Synobar 6","Scaro 6","Orovex 6","Lit Up 6","Gold 6","Frost 6","ExtraPanthen"
 ];
 
+export const GOVERNORATES = [
+  "القاهرة", "الجيزة", "الإسكندرية", "الدقهلية", "البحر الأحمر", "البحيرة", "الفيوم", 
+  "الغربية", "الإسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد", 
+  "السويس", "الشرقية", "دمياط", "بورسعيد", "جنوب سيناء", "كفر الشيخ", 
+  "مطروح", "قنا", "شمال سيناء", "سوهاج", "بني سويف", "الأقصر", "أسوان", "أسيوط"
+];
+
 export type SportType = 'running' | 'football' | 'penalty';
 export type GenderType = 'male' | 'female';
 
@@ -15,11 +22,12 @@ export interface Registration {
     id: string;
     name: string;
     department: string;
+    governorate: string;
     maestroCode: string;
     nationalId: string;
     contact: string;
     gender: GenderType;
     sport: SportType;
     sportOption: string;
-    createdAt: Date;
+    createdAt: any;
 }
