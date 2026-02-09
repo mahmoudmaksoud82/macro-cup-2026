@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import Image from 'next/image';
@@ -14,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // استخدام الصورة الموجودة في مجلد public
-  const backgroundImage = '/background.jpg';
+  const backgroundImage = '/background.png';
 
   return (
     <html lang="ar" dir="rtl" className="h-full">

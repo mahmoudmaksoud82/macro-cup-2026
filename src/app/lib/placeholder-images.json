@@ -1,3 +1,4 @@
+
 {
   "placeholderImages": [
     {
@@ -15,7 +16,7 @@
     {
       "id": "app-background",
       "description": "Macro Cup Custom Background",
-      "imageUrl": "/background.jpg",
+      "imageUrl": "/background.png",
       "imageHint": "sports background"
     }
   ]
