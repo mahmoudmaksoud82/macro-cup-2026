@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className="font-body min-h-screen relative">
         <FirebaseClientProvider>
           {/* Full Stretch Fixed Background Wrapper */}
-          <div className="fixed inset-0 -z-50 w-full h-full">
+          <div className="fixed inset-0 -z-50 w-full h-full overflow-hidden">
             <Image
               src="/Background.jpeg"
               alt="App Background"
@@ -35,7 +35,7 @@ export default function RootLayout({
           </div>
           
           {/* Main Content Area */}
-          <div className="relative z-10 w-full min-h-screen overflow-y-auto">
+          <div className="relative z-10 w-full min-h-screen overflow-y-auto bg-transparent">
             {children}
           </div>
         </FirebaseClientProvider>
