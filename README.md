@@ -1,5 +1,30 @@
-# Firebase Studio
+# Macro Cup 2026 - نظام التسجيل الرياضي
 
-This is a NextJS starter in Firebase Studio.
+هذا التطبيق مبني باستخدام Next.js و Firebase لخدمة نظام تسجيل المشاركين في الفعاليات الرياضية.
 
-To get started, take a look at src/app/page.tsx.
+## التشغيل على مدار الساعة (Deployment)
+
+لجعل هذا التطبيق متاحاً 24/7، اتبع الخطوات التالية للنشر باستخدام **Firebase App Hosting**:
+
+1. **رفع الكود إلى GitHub:**
+   - قم بإنشاء مستودع جديد على GitHub وارفع إليه ملفات المشروع.
+
+2. **إعداد Firebase App Hosting:**
+   - انتقل إلى [Firebase Console](https://console.firebase.google.com/).
+   - اختر مشروعك الحالي.
+   - من القائمة الجانبية، اختر **App Hosting**.
+   - اضغط على "Get Started" وقم بربط حساب GitHub الخاص بك.
+   - اختر المستودع والفرع (branch) الذي رفعت عليه الكود.
+
+3. **النشر:**
+   - سيتعرف Firebase تلقائياً على إعدادات Next.js الموجودة في `apphosting.yaml`.
+   - سيقوم النظام ببناء التطبيق وتوفير رابط دائم (URL) يعمل على مدار الساعة.
+
+## المميزات التقنية
+- **Next.js 15 (App Router)**: للأداء العالي وتجربة المستخدم السلسة.
+- **Firebase Firestore**: لتخزين بيانات المسجلين في الوقت الفعلي.
+- **Firebase Auth (Anonymous)**: للسماح للمستخدمين بالتسجيل دون تعقيدات، مع الحفاظ على أمان البيانات.
+- **Tailwind CSS & ShadCN UI**: لتصميم عصري ومتجاوب مع جميع الشاشات.
+
+## الإدارة (Admin Panel)
+يمكن للمسؤولين الدخول إلى لوحة التحكم عبر الرابط `/registrations` باستخدام رمز الوصول المخصص (Admin Code) لمشاهدة قائمة المسجلين وتحميلها بصيغة Excel.
