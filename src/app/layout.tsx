@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import Image from 'next/image';
@@ -13,7 +14,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // اسم الصورة الجديد كما تم تحديده
+  // اسم الصورة الموجودة في مجلد public
   const backgroundImage = '/background.png';
 
   return (
