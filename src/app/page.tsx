@@ -11,6 +11,7 @@ import { Users, Lock, ShieldCheck, Clock } from "lucide-react";
 
 export default function Home() {
   const [adminCode, setAdminCode] = useState("");
+  const [hasMounted, setHasMounted] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -20,6 +21,7 @@ export default function Home() {
   });
 
   useEffect(() => {
+    setHasMounted(true);
     const targetDate = new Date("2026-02-15T14:00:00");
 
     const timer = setInterval(() => {
@@ -56,31 +58,35 @@ export default function Home() {
             آخر ميعاد للتسجيل 15 فبراير الأحد 2 ظهراً
           </p>
 
-          {!timeLeft.isExpired ? (
-            <div className="flex justify-center items-center gap-2 md:gap-6 mt-8" dir="ltr">
-              <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
-                <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.days}</span>
-                <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Days</span>
-              </div>
-              <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
-              <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
-                <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.hours.toString().padStart(2, '0')}</span>
-                <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Hours</span>
-              </div>
-              <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
-              <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
-                <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.minutes.toString().padStart(2, '0')}</span>
-                <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Mins</span>
-              </div>
-              <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
-              <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
-                <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums text-accent">{timeLeft.seconds.toString().padStart(2, '0')}</span>
-                <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Secs</span>
-              </div>
-            </div>
-          ) : (
-            <div className="inline-flex items-center gap-2 bg-destructive/10 text-destructive px-8 py-3 rounded-full font-bold animate-pulse">
-              <Clock className="w-5 h-5" /> انتهى موعد التسجيل الرسمي
+          {hasMounted && (
+            <div className="animate-in fade-in duration-700">
+              {!timeLeft.isExpired ? (
+                <div className="flex justify-center items-center gap-2 md:gap-6 mt-8" dir="ltr">
+                  <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
+                    <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.days}</span>
+                    <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Days</span>
+                  </div>
+                  <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
+                  <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
+                    <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.hours.toString().padStart(2, '0')}</span>
+                    <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Hours</span>
+                  </div>
+                  <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
+                  <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
+                    <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                    <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Mins</span>
+                  </div>
+                  <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
+                  <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
+                    <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums text-accent">{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                    <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Secs</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-2 bg-destructive/10 text-destructive px-8 py-3 rounded-full font-bold animate-pulse">
+                  <Clock className="w-5 h-5" /> انتهى موعد التسجيل الرسمي
+                </div>
+              )}
             </div>
           )}
         </div>

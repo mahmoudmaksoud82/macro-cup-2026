@@ -12,10 +12,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Registration } from "@/lib/sports";
+import { useState, useEffect } from "react";
 
 export default function RegistrationsPage() {
   const firestore = useFirestore();
   const { toast } = useToast();
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const q = useMemoFirebase(() => {
     return query(collection(firestore, "registrations"), orderBy("createdAt", "desc"));
@@ -34,7 +40,7 @@ export default function RegistrationsPage() {
   };
 
   const formatDateTime = (createdAt: any) => {
-    if (!createdAt) return "-";
+    if (!createdAt || !hasMounted) return "-";
     // Firestore Timestamp conversion
     const date = createdAt.toDate ? createdAt.toDate() : new Date(createdAt);
     return date.toLocaleString('ar-EG', {
