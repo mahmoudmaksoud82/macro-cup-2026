@@ -41,15 +41,21 @@ export default function RegistrationsPage() {
 
   const formatDateTime = (createdAt: any) => {
     if (!createdAt || !hasMounted) return "-";
-    // Firestore Timestamp conversion
-    const date = createdAt.toDate ? createdAt.toDate() : new Date(createdAt);
-    return date.toLocaleString('ar-EG', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    try {
+      // Firestore Timestamp conversion safely
+      const date = createdAt.toDate ? createdAt.toDate() : new Date(createdAt);
+      if (isNaN(date.getTime())) return "-";
+      
+      return date.toLocaleString('ar-EG', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return "-";
+    }
   };
 
   const downloadExcel = () => {

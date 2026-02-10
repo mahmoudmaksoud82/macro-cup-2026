@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Users, Lock, ShieldCheck, Clock } from "lucide-react";
+import { Lock, ShieldCheck, Clock } from "lucide-react";
 
 export default function Home() {
   const [adminCode, setAdminCode] = useState("");
@@ -24,13 +24,13 @@ export default function Home() {
     setHasMounted(true);
     const targetDate = new Date("2026-02-15T14:00:00");
 
-    const timer = setInterval(() => {
+    const calculateTime = () => {
       const now = new Date();
       const difference = targetDate.getTime() - now.getTime();
 
       if (difference <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
-        clearInterval(timer);
+        return true;
       } else {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -39,7 +39,14 @@ export default function Home() {
           seconds: Math.floor((difference / 1000) % 60),
           isExpired: false
         });
+        return false;
       }
+    };
+
+    calculateTime();
+    const timer = setInterval(() => {
+      const isOver = calculateTime();
+      if (isOver) clearInterval(timer);
     }, 1000);
 
     return () => clearInterval(timer);
