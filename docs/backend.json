@@ -53,8 +53,8 @@
         },
         "tShirtSize": {
           "type": "string",
-          "description": "The T-shirt size for football players (L, XL, 2XL).",
-          "enum": ["L", "XL", "2XL"]
+          "description": "The T-shirt size for football players (L, XL, 2XL, 3XL).",
+          "enum": ["L", "XL", "2XL", "3XL"]
         },
         "createdAt": {
           "type": "string",
