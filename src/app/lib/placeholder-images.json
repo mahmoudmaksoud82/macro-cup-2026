@@ -16,8 +16,8 @@
     {
       "id": "app-background",
       "description": "Macro Cup Custom Background",
-      "imageUrl": "/rit.jpeg",
-      "imageHint": "sports background"
+      "imageUrl": "/logo.png",
+      "imageHint": "sports logo"
     }
   ]
 }

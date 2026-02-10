@@ -136,11 +136,10 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* تم تحريك الصورة يميناً قليلاً بتغيير left من -40px إلى -30px */}
       <div className="absolute top-[-10px] left-[-30px] w-[166px] h-[166px] pointer-events-none z-0">
         <Image 
-          src="/rit.jpeg"
-          alt="decoration"
+          src="/logo.png"
+          alt="logo"
           width={166}
           height={166}
           className="object-contain"
