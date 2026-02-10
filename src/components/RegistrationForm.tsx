@@ -136,12 +136,12 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      <div className="absolute top-[-5px] left-[-10px] w-[80px] h-[80px] pointer-events-none z-0">
+      <div className="absolute top-[-5px] left-[-10px] w-[72px] h-[72px] pointer-events-none z-0">
         <Image 
           src="/logo.png"
           alt="logo"
-          width={80}
-          height={80}
+          width={72}
+          height={72}
           className="object-contain"
           priority
           quality={100}
