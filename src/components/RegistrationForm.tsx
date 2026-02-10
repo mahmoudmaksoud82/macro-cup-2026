@@ -42,6 +42,9 @@ export default function RegistrationForm() {
     ? allRegistrations.filter(r => r.sport === 'football').map(r => r.sportOption)
     : [];
 
+  const availableFootballOptions = FOOTBALL_OPTIONS.filter(opt => !usedOptions.includes(opt));
+  const isFootballFull = availableFootballOptions.length === 0;
+
   const penaltyCount = allRegistrations 
     ? allRegistrations.filter(r => r.sport === 'penalty').length
     : 0;
@@ -96,6 +99,10 @@ export default function RegistrationForm() {
         setStatus({ type: 'error', message: "يرجى اختيار مقاس التيشرت." });
         return;
       }
+      if (isFootballFull) {
+        setStatus({ type: 'error', message: "تم اكمال الفرق لا يمكن التسجيل" });
+        return;
+      }
     }
 
     if (!data.governorate) {
@@ -146,8 +153,6 @@ export default function RegistrationForm() {
     (e.target as HTMLFormElement).reset();
     setIsSubmitting(false);
   };
-
-  const availableFootballOptions = FOOTBALL_OPTIONS.filter(opt => !usedOptions.includes(opt));
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
@@ -303,7 +308,11 @@ export default function RegistrationForm() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="running">رياضة الجري (للجميع)</SelectItem>
-                  {gender === 'male' && <SelectItem value="football">كرة قدم (رجال فقط)</SelectItem>}
+                  {gender === 'male' && (
+                    <SelectItem value="football" disabled={isFootballFull}>
+                      كرة قدم (رجال فقط) {isFootballFull && "- تم اكمال الفرق"}
+                    </SelectItem>
+                  )}
                   {gender === 'female' && (
                     <SelectItem value="penalty" disabled={isPenaltyFull}>
                       ضربات جزاء (سيدات فقط) {isPenaltyFull && "- اكتمل العدد"}
@@ -317,16 +326,20 @@ export default function RegistrationForm() {
               <>
                 <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                   <Label className="flex items-center gap-2">الاختيار (كرة قدم)</Label>
-                  <Select name="sportOption" required onValueChange={setSportOption}>
-                    <SelectTrigger className="bg-white/50">
-                      <SelectValue placeholder="اختر الاختيار المتاح" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-60">
-                      {availableFootballOptions.map((opt) => (
-                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {isFootballFull ? (
+                    <p className="text-destructive font-bold text-sm bg-destructive/10 p-2 rounded">تم اكمال الفرق لا يمكن التسجيل</p>
+                  ) : (
+                    <Select name="sportOption" required onValueChange={setSportOption}>
+                      <SelectTrigger className="bg-white/50">
+                        <SelectValue placeholder="اختر الاختيار المتاح" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-60">
+                        {availableFootballOptions.map((opt) => (
+                          <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
                 <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                   <Label className="flex items-center gap-2">
@@ -351,7 +364,7 @@ export default function RegistrationForm() {
           <Button 
             type="submit" 
             className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 transition-all shadow-lg" 
-            disabled={isSubmitting || isUserLoading}
+            disabled={isSubmitting || isUserLoading || (sport === 'football' && isFootballFull)}
           >
             {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> جاري التسجيل...</> : "تأكيد التسجيل"}
           </Button>
