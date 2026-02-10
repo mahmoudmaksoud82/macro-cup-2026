@@ -149,13 +149,13 @@ export default function RegistrationForm() {
         />
       </div>
 
-      {/* Stamp on the top left */}
-      <div className="absolute top-[18px] left-[20px] w-[72px] h-[72px] md:w-[80px] md:h-[80px] pointer-events-none z-0">
+      {/* Stamp on the top left - Enlarged by 20% */}
+      <div className="absolute top-[18px] left-[20px] w-[86px] h-[86px] md:w-[96px] md:h-[96px] pointer-events-none z-0">
         <Image 
           src="/STAMP.png"
           alt="stamp"
-          width={80}
-          height={80}
+          width={96}
+          height={96}
           className="object-contain w-full h-full"
           priority
           quality={100}
