@@ -48,7 +48,7 @@ export default function Home() {
       {/* Hero Content */}
       <div className="container mx-auto px-4 mb-12 text-center">
         <h1 className="text-5xl md:text-7xl font-bold font-headline mb-4 text-primary drop-shadow-sm">
-          Macro CUP 2026
+          Macro CUP Ramadan 2026
         </h1>
         
         <div className="space-y-6">
@@ -125,3 +125,4 @@ export default function Home() {
     </main>
   );
 }
+
