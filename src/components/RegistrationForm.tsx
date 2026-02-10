@@ -136,26 +136,26 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* Logo on the top right (Arabic context) */}
-      <div className="absolute top-[18px] right-[20px] w-[72px] h-[72px] md:w-[80px] md:h-[80px] pointer-events-none z-0">
+      {/* Logo on the top right */}
+      <div className="absolute top-[18px] right-[20px] w-[72px] h-[72px] md:w-[120px] md:h-[120px] pointer-events-none z-0">
         <Image 
           src="/logo.png"
           alt="logo"
-          width={80}
-          height={80}
+          width={120}
+          height={120}
           className="object-contain w-full h-full"
           priority
           quality={100}
         />
       </div>
 
-      {/* Stamp on the top left - Enlarged by 20% */}
-      <div className="absolute top-[18px] left-[20px] w-[86px] h-[86px] md:w-[96px] md:h-[96px] pointer-events-none z-0">
+      {/* Stamp on the top left */}
+      <div className="absolute top-[18px] left-[20px] w-[86px] h-[86px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
         <Image 
           src="/STAMP.png"
           alt="stamp"
-          width={96}
-          height={96}
+          width={140}
+          height={140}
           className="object-contain w-full h-full"
           priority
           quality={100}
