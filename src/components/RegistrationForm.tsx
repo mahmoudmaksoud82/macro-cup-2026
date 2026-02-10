@@ -63,10 +63,17 @@ export default function RegistrationForm() {
 
     const formData = new FormData(e.currentTarget);
     const nationalId = formData.get("nationalId")?.toString() || "";
+    const contact = formData.get("contact")?.toString() || "";
 
     // Validation for National ID length
     if (nationalId.length !== 14) {
       setStatus({ type: 'error', message: "لابد من ادخال 14 رقم" });
+      return;
+    }
+
+    // Validation for Contact length
+    if (contact.length !== 11) {
+      setStatus({ type: 'error', message: "الرقم ناقص" });
       return;
     }
 
@@ -77,7 +84,7 @@ export default function RegistrationForm() {
       governorate: governorate,
       maestroCode: formData.get("maestroCode")?.toString() || "",
       nationalId: nationalId,
-      contact: formData.get("contact")?.toString() || "",
+      contact: contact,
       gender: gender as GenderType,
       sport: sport as SportType,
       sportOption: sport === 'football' ? sportOption : sport as string,
@@ -258,7 +265,17 @@ export default function RegistrationForm() {
               <Label htmlFor="contact" className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent" /> رقم التواصل
               </Label>
-              <Input id="contact" name="contact" required placeholder="رقم الهاتف" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
+              <Input 
+                id="contact" 
+                name="contact" 
+                required 
+                placeholder="رقم الهاتف" 
+                maxLength={11}
+                className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" 
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
+                }}
+              />
             </div>
 
             <div className="space-y-2">
