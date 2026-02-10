@@ -73,7 +73,7 @@ export default function RegistrationForm() {
 
     // Validation for Contact length
     if (contact.length !== 11) {
-      setStatus({ type: 'error', message: "الرقم ناقص" });
+      setStatus({ type: 'error', message: "رقم التواصل ناقص" });
       return;
     }
 
