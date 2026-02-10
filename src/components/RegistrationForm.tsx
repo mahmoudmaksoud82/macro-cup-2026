@@ -170,7 +170,7 @@ export default function RegistrationForm() {
         </div>
         <CardTitle className="text-3xl font-headline text-primary">نموذج تسجيل الرياضة</CardTitle>
         <CardDescription className="text-lg">
-          سجل بياناتك للمشاركة في الفعاليات الرياضية القادمة. (جميع الحقول والاختيارات مطلوبة لإتمام التسجيل)
+          سجل بياناتك للمشاركة في الفعاليات الرياضية القادمة.
         </CardDescription>
       </CardHeader>
       
