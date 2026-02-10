@@ -62,13 +62,21 @@ export default function RegistrationForm() {
     }
 
     const formData = new FormData(e.currentTarget);
+    const nationalId = formData.get("nationalId")?.toString() || "";
+
+    // Validation for National ID length
+    if (nationalId.length !== 14) {
+      setStatus({ type: 'error', message: "لابد من ادخال 14 رقم" });
+      return;
+    }
+
     const data: Partial<Registration> = {
       name: formData.get("name")?.toString() || "",
       department: formData.get("department")?.toString() || "",
       jobTitle: formData.get("jobTitle")?.toString() || "",
       governorate: governorate,
       maestroCode: formData.get("maestroCode")?.toString() || "",
-      nationalId: formData.get("nationalId")?.toString() || "",
+      nationalId: nationalId,
       contact: formData.get("contact")?.toString() || "",
       gender: gender as GenderType,
       sport: sport as SportType,
@@ -233,7 +241,17 @@ export default function RegistrationForm() {
               <Label htmlFor="nationalId" className="flex items-center gap-2">
                 <Hash className="w-4 h-4 text-accent" /> الرقم القومي
               </Label>
-              <Input id="nationalId" name="nationalId" required placeholder="14 رقم" maxLength={14} className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
+              <Input 
+                id="nationalId" 
+                name="nationalId" 
+                required 
+                placeholder="14 رقم" 
+                maxLength={14} 
+                className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" 
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
+                }}
+              />
             </div>
 
             <div className="space-y-2">
