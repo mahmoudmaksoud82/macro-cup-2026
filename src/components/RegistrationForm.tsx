@@ -67,7 +67,7 @@ export default function RegistrationForm() {
 
     // Validation for National ID length
     if (nationalId.length !== 14) {
-      setStatus({ type: 'error', message: "لابد من ادخال 14 رقم" });
+      setStatus({ type: 'error', message: "الرقم القومي ناقص" });
       return;
     }
 
