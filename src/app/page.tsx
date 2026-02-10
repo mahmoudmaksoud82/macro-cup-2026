@@ -53,7 +53,7 @@ export default function Home() {
         
         <div className="space-y-6">
           <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto opacity-90 text-foreground">
-            آخر ميعاد للتسجيل 15 فبراير 2 ظهراً
+            آخر ميعاد للتسجيل 15 فبراير الأحد 2 ظهراً
           </p>
 
           {!timeLeft.isExpired ? (
