@@ -154,26 +154,26 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* Logo on the top RIGHT (Fixed Position) */}
-      <div className="absolute top-[20px] right-[20px] w-[72px] h-[72px] md:w-[130px] md:h-[130px] pointer-events-none z-0">
+      {/* Stamp on the top RIGHT (Fixed Position) */}
+      <div className="absolute top-[20px] right-[20px] w-[86px] h-[86px] md:w-[150px] md:h-[150px] pointer-events-none z-0">
         <Image 
-          src="/logo.png"
-          alt="logo"
-          width={130}
-          height={130}
+          src="/STAMP.png"
+          alt="stamp"
+          width={150}
+          height={150}
           className="object-contain w-full h-full"
           priority
           quality={100}
         />
       </div>
 
-      {/* Stamp on the top LEFT (Fixed Position) */}
-      <div className="absolute top-[20px] left-[20px] w-[86px] h-[86px] md:w-[150px] md:h-[150px] pointer-events-none z-0">
+      {/* Logo on the top LEFT (Fixed Position) */}
+      <div className="absolute top-[20px] left-[20px] w-[72px] h-[72px] md:w-[130px] md:h-[130px] pointer-events-none z-0">
         <Image 
-          src="/STAMP.png"
-          alt="stamp"
-          width={150}
-          height={150}
+          src="/logo.png"
+          alt="logo"
+          width={130}
+          height={130}
           className="object-contain w-full h-full"
           priority
           quality={100}
