@@ -1,16 +1,47 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegistrationForm from "@/components/RegistrationForm";
 import { Toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Users, Lock, ShieldCheck } from "lucide-react";
+import { Users, Lock, ShieldCheck, Clock } from "lucide-react";
 
 export default function Home() {
   const [adminCode, setAdminCode] = useState("");
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isExpired: false
+  });
+
+  useEffect(() => {
+    const targetDate = new Date("2026-02-15T14:00:00");
+
+    const timer = setInterval(() => {
+      const now = new Date();
+      const difference = targetDate.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
+        clearInterval(timer);
+      } else {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+          isExpired: false
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <main className="min-h-screen pb-20 pt-10 relative bg-transparent flex flex-col items-center">
@@ -19,9 +50,40 @@ export default function Home() {
         <h1 className="text-5xl md:text-7xl font-bold font-headline mb-4 text-primary drop-shadow-sm">
           Macro CUP 2026
         </h1>
-        <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto opacity-90 text-foreground">
-          شارك في التحدي، أثبت مهاراتك، وكن جزءاً من الحدث الرياضي الأكبر
-        </p>
+        
+        <div className="space-y-6">
+          <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto opacity-90 text-foreground">
+            آخر ميعاد للتسجيل 15 فبراير 2 ظهراً
+          </p>
+
+          {!timeLeft.isExpired ? (
+            <div className="flex justify-center items-center gap-2 md:gap-6 mt-8" dir="ltr">
+              <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
+                <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.days}</span>
+                <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Days</span>
+              </div>
+              <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
+              <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
+                <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.hours.toString().padStart(2, '0')}</span>
+                <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Hours</span>
+              </div>
+              <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
+              <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
+                <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums">{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Mins</span>
+              </div>
+              <span className="text-2xl md:text-4xl font-bold text-primary/20">:</span>
+              <div className="flex flex-col items-center bg-white/40 backdrop-blur-sm p-3 md:p-4 rounded-2xl border border-primary/5 min-w-[70px] md:min-w-[100px] shadow-sm">
+                <span className="text-3xl md:text-5xl font-bold text-primary tabular-nums text-accent">{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                <span className="text-[10px] md:text-xs uppercase text-muted-foreground font-bold tracking-widest mt-1">Secs</span>
+              </div>
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-2 bg-destructive/10 text-destructive px-8 py-3 rounded-full font-bold animate-pulse">
+              <Clock className="w-5 h-5" /> انتهى موعد التسجيل الرسمي
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Form Section */}
