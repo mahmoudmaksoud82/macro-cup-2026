@@ -157,12 +157,12 @@ export default function RegistrationForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
       {/* Logo on the top right */}
-      <div className="absolute top-[30px] right-[20px] w-[72px] h-[72px] md:w-[80px] md:h-[80px] pointer-events-none z-0">
+      <div className="absolute top-[20px] right-[20px] w-[72px] h-[72px] md:w-[120px] md:h-[120px] pointer-events-none z-0">
         <Image 
           src="/logo.png"
           alt="logo"
-          width={80}
-          height={80}
+          width={120}
+          height={120}
           className="object-contain w-full h-full"
           priority
           quality={100}
@@ -170,19 +170,19 @@ export default function RegistrationForm() {
       </div>
 
       {/* Stamp on the top left */}
-      <div className="absolute top-[30px] left-[20px] w-[86px] h-[86px] md:w-[96px] md:h-[96px] pointer-events-none z-0">
+      <div className="absolute top-[20px] left-[20px] w-[86px] h-[86px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
         <Image 
           src="/STAMP.png"
           alt="stamp"
-          width={96}
-          height={96}
+          width={140}
+          height={140}
           className="object-contain w-full h-full"
           priority
           quality={100}
         />
       </div>
 
-      <CardHeader className="text-center relative z-10">
+      <CardHeader className="text-center relative z-10 pt-16 md:pt-24">
         <div className="flex justify-center mb-4">
           <div className="p-3 bg-primary/10 rounded-full">
             <Trophy className="w-10 h-10 text-primary" />
