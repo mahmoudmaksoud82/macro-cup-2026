@@ -22,7 +22,8 @@ export default function Home() {
 
   useEffect(() => {
     setHasMounted(true);
-    const targetDate = new Date("2026-02-15T14:00:00");
+    // استخدام توقيت محدد (توقيت مصر GMT+2) لضمان عدم حدوث تعارض في الـ Hydration
+    const targetDate = new Date("2026-02-15T14:00:00+02:00");
 
     const calculateTime = () => {
       const now = new Date();

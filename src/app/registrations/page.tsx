@@ -40,9 +40,9 @@ export default function RegistrationsPage() {
   };
 
   const formatDateTime = (createdAt: any) => {
+    // حماية إضافية ضد Hydration Error: لا يتم عرض التاريخ إلا بعد تحميل الصفحة في المتصفح
     if (!createdAt || !hasMounted) return "-";
     try {
-      // Firestore Timestamp conversion safely
       const date = createdAt.toDate ? createdAt.toDate() : new Date(createdAt);
       if (isNaN(date.getTime())) return "-";
       
