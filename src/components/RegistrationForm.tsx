@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -31,9 +32,11 @@ export default function RegistrationForm() {
   const [tShirtSize, setTShirtSize] = useState<string>("");
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
+  // تأمين الاستعلام: لا يتم الطلب إلا إذا كان المستخدم مسجلاً للدخول
   const registrationsQuery = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
     return query(collection(firestore, "registrations"));
-  }, [firestore]);
+  }, [firestore, user]);
   
   const { data: allRegistrations } = useCollection(registrationsQuery);
 
@@ -153,33 +156,32 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* Logo on the top LEFT (Fixed Position) */}
-      <div className="absolute top-[20px] left-[20px] w-[86px] h-[86px] md:w-[150px] md:h-[150px] pointer-events-none z-0">
+      {/* الشعار والختم بمواقعهم الجديدة وأحجامهم المحسنة */}
+      <div className="absolute top-[20px] right-[20px] w-[86px] h-[86px] md:w-[160px] md:h-[160px] pointer-events-none z-0">
         <Image 
           src="/logo.png"
           alt="logo"
-          width={150}
-          height={150}
+          width={160}
+          height={160}
           className="object-contain w-full h-full"
           priority
           quality={100}
         />
       </div>
 
-      {/* Stamp on the top RIGHT (Fixed Position) */}
-      <div className="absolute top-[20px] right-[20px] w-[72px] h-[72px] md:w-[130px] md:h-[130px] pointer-events-none z-0">
+      <div className="absolute top-[20px] left-[20px] w-[72px] h-[72px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
         <Image 
           src="/STAMP.png"
           alt="stamp"
-          width={130}
-          height={130}
+          width={140}
+          height={140}
           className="object-contain w-full h-full"
           priority
           quality={100}
         />
       </div>
 
-      <CardHeader className="text-center relative z-10 pt-24 md:pt-40">
+      <CardHeader className="text-center relative z-10 pt-24 md:pt-44">
         <div className="flex justify-center mb-4">
           <div className="p-3 bg-primary/10 rounded-full">
             <Trophy className="w-10 h-10 text-primary" />
@@ -307,7 +309,7 @@ export default function RegistrationForm() {
                   <SelectItem value="running">رياضة الجري (للجميع)</SelectItem>
                   {gender === 'male' && (
                     <SelectItem value="football" disabled={isFootballFull}>
-                      كرة قدم (رجال فقط) {isFootballFull && "- تم اكمال الفرق"}
+                      كرة قدم (رجال فقط) {isFootballFull && "- تم اكمال الفرق لا يمكن التسجيل"}
                     </SelectItem>
                   )}
                   {gender === 'female' && (

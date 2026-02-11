@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useFirestore, useCollection, deleteDocumentNonBlocking } from "@/firebase";
+import { useFirestore, useCollection, deleteDocumentNonBlocking, useUser } from "@/firebase";
 import { collection, query, orderBy, doc } from "firebase/firestore";
 import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 
 export default function RegistrationsPage() {
   const firestore = useFirestore();
+  const { user } = useUser();
   const { toast } = useToast();
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -23,9 +24,11 @@ export default function RegistrationsPage() {
     setHasMounted(true);
   }, []);
 
+  // تأمين الاستعلام: لا يتم الطلب إلا إذا كان المستخدم مسجلاً للدخول
   const q = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
     return query(collection(firestore, "registrations"), orderBy("createdAt", "desc"));
-  }, [firestore]);
+  }, [firestore, user]);
 
   const { data: registrations, isLoading } = useCollection<Registration>(q);
 
@@ -40,7 +43,6 @@ export default function RegistrationsPage() {
   };
 
   const formatDateTime = (createdAt: any) => {
-    // حماية إضافية ضد Hydration Error: لا يتم عرض التاريخ إلا بعد تحميل الصفحة في المتصفح
     if (!createdAt || !hasMounted) return "-";
     try {
       const date = createdAt.toDate ? createdAt.toDate() : new Date(createdAt);
@@ -143,10 +145,10 @@ export default function RegistrationsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {isLoading ? (
+            {isLoading || !user ? (
               <div className="flex flex-col items-center justify-center py-20">
                 <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
-                <p className="text-lg font-medium">جاري تحميل البيانات...</p>
+                <p className="text-lg font-medium">جاري التحقق من الصلاحيات والتحميل...</p>
               </div>
             ) : registrations && registrations.length > 0 ? (
               <div className="overflow-x-auto">
