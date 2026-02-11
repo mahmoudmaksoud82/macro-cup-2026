@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -22,7 +21,7 @@ export default function Home() {
 
   useEffect(() => {
     setHasMounted(true);
-    // استخدام توقيت محدد (توقيت مصر GMT+2) لضمان عدم حدوث تعارض في الـ Hydration
+    // توقيت القاهرة GMT+2
     const targetDate = new Date("2026-02-15T14:00:00+02:00");
 
     const calculateTime = () => {

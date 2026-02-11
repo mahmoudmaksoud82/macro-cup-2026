@@ -3,8 +3,11 @@ import './globals.css';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
-  title: 'Macro Cup 2026 - Registration',
+  title: 'Macro Ramadan Cup 2026 - Registration',
   description: 'Register for Macro Cup Ramadan 2026',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
