@@ -105,7 +105,7 @@ export default function Home() {
       </div>
 
       <div className="mt-12 mb-8 flex flex-col items-center gap-4 w-full max-w-xs px-4">
-        {adminCode !== "RMM#26" ? (
+        {adminCode !== "Rmc@2026" ? (
           <div className="w-full space-y-2">
             <p className="text-xs text-center text-muted-foreground font-medium">منطقة المسؤولين فقط (Admin Area)</p>
             <div className="relative w-full group">
