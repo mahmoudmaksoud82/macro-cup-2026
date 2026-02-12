@@ -11,6 +11,7 @@ import { Loader2, ArrowRight, ShieldCheck, Clock, Monitor } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface AccessLog {
   id: string;
@@ -21,11 +22,19 @@ interface AccessLog {
 export default function LogsPage() {
   const firestore = useFirestore();
   const { user } = useUser();
+  const router = useRouter();
   const [hasMounted, setHasMounted] = useState(false);
 
+  const ADMIN_SECRET = "#Hogs@30uo";
+
+  // حماية الصفحة: طرد أي مستخدم لا يملك الرمز الحالي الصحيح
   useEffect(() => {
     setHasMounted(true);
-  }, []);
+    const token = sessionStorage.getItem("admin_token");
+    if (token !== ADMIN_SECRET) {
+      router.push("/");
+    }
+  }, [router]);
 
   const q = useMemoFirebase(() => {
     if (!firestore || !user) return null;

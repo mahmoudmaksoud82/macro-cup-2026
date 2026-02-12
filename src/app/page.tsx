@@ -20,6 +20,8 @@ export default function Home() {
     isExpired: false
   });
 
+  const ADMIN_SECRET = "#Hogs@30uo";
+
   useEffect(() => {
     setHasMounted(true);
     
@@ -53,6 +55,13 @@ export default function Home() {
 
     return () => clearInterval(timer);
   }, []);
+
+  // حفظ الرمز في الجلسة عند إدخاله بشكل صحيح
+  useEffect(() => {
+    if (adminCode === ADMIN_SECRET) {
+      sessionStorage.setItem("admin_token", adminCode);
+    }
+  }, [adminCode]);
 
   return (
     <main className="min-h-screen pb-20 pt-10 relative bg-transparent flex flex-col items-center">
@@ -105,7 +114,7 @@ export default function Home() {
       </div>
 
       <div className="mt-12 mb-8 flex flex-col items-center gap-4 w-full max-w-xs px-4">
-        {adminCode !== "#Hogs@30uo" ? (
+        {adminCode !== ADMIN_SECRET ? (
           <div className="w-full space-y-2">
             <p className="text-xs text-center text-muted-foreground font-medium">منطقة المسؤولين فقط (Admin Area)</p>
             <div className="relative w-full group">

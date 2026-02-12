@@ -13,16 +13,25 @@ import { Button } from "@/components/ui/button";
 import { Registration } from "@/lib/sports";
 import { useState, useEffect } from "react";
 import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { useRouter } from "next/navigation";
 
 export default function RegistrationsPage() {
   const firestore = useFirestore();
   const { user } = useUser();
+  const router = useRouter();
   const [hasMounted, setHasMounted] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
 
+  const ADMIN_SECRET = "#Hogs@30uo";
+
+  // حماية الصفحة: طرد أي مستخدم لا يملك الرمز الحالي الصحيح
   useEffect(() => {
     setHasMounted(true);
-  }, []);
+    const token = sessionStorage.getItem("admin_token");
+    if (token !== ADMIN_SECRET) {
+      router.push("/");
+    }
+  }, [router]);
 
   // سجل الوصول عند فتح الصفحة
   useEffect(() => {
