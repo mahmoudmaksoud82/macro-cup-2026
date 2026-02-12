@@ -75,6 +75,17 @@
         "sport",
         "sportOption"
       ]
+    },
+    "AccessLog": {
+      "title": "AccessLog",
+      "type": "object",
+      "description": "Logs of admin area access.",
+      "properties": {
+        "id": { "type": "string" },
+        "accessedAt": { "type": "string", "format": "date-time" },
+        "userAgent": { "type": "string" }
+      },
+      "required": ["id", "accessedAt"]
     }
   },
   "auth": {
@@ -92,7 +103,7 @@
           "schema": {
             "$ref": "#/backend/entities/Registration"
           },
-          "description": "Stores user registration data for sports. Includes job title, governorate, t-shirt size, and auto-generated timestamp.",
+          "description": "Stores user registration data for sports.",
           "params": [
             {
               "name": "registrationId",
@@ -100,8 +111,24 @@
             }
           ]
         }
+      },
+      {
+        "path": "/access_logs/{logId}",
+        "definition": {
+          "entityName": "AccessLog",
+          "schema": {
+            "$ref": "#/backend/entities/AccessLog"
+          },
+          "description": "Stores logs of admin dashboard access.",
+          "params": [
+            {
+              "name": "logId",
+              "description": "Unique identifier for the log entry."
+            }
+          ]
+        }
       }
     ],
-    "reasoning": "Data structure stores comprehensive registration info including job titles, governorates, sports-specific options, and precise registration timestamps."
+    "reasoning": "Data structure stores comprehensive registration info and admin access logs for security auditing."
   }
 }

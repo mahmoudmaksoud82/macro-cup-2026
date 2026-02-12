@@ -13,6 +13,11 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    match /access_logs/{logId} {
+      allow read: if isSignedIn();
+      allow create: if true;
+    }
+
     match /{path=**} {
       allow read, write: if false;
     }

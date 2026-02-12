@@ -2,25 +2,38 @@
 "use client";
 
 import { useFirestore, useCollection, useUser } from "@/firebase";
-import { collection, query, orderBy } from "firebase/firestore";
+import { collection, query, orderBy, serverTimestamp } from "firebase/firestore";
 import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Users, LayoutDashboard, Download, Shirt, Clock } from "lucide-react";
+import { Loader2, Trophy, Users, LayoutDashboard, Download, Shirt, Clock, ScrollText } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Registration } from "@/lib/sports";
 import { useState, useEffect } from "react";
+import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 
 export default function RegistrationsPage() {
   const firestore = useFirestore();
   const { user } = useUser();
   const [hasMounted, setHasMounted] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  // سجل الوصول عند فتح الصفحة
+  useEffect(() => {
+    if (firestore && hasMounted && !isLogged) {
+      addDocumentNonBlocking(collection(firestore, "access_logs"), {
+        accessedAt: serverTimestamp(),
+        userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'unknown',
+      });
+      setIsLogged(true);
+    }
+  }, [firestore, hasMounted, isLogged]);
 
   const q = useMemoFirebase(() => {
     if (!firestore || !user) return null;
@@ -105,7 +118,7 @@ export default function RegistrationsPage() {
     <main className="min-h-screen pb-20 pt-10 px-4">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Link href="/">
               <Button variant="outline" className="gap-2">
                 <LayoutDashboard className="w-4 h-4" /> العودة للتسجيل
@@ -119,6 +132,11 @@ export default function RegistrationsPage() {
             >
               <Download className="w-4 h-4" /> تحميل Excel
             </Button>
+            <Link href="/registrations/logs">
+              <Button variant="outline" className="gap-2 border-primary/20 text-primary hover:bg-primary/5">
+                <ScrollText className="w-4 h-4" /> سجل الوصول
+              </Button>
+            </Link>
           </div>
           <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
             <Trophy className="w-8 h-8" /> قائمة المسجلين
