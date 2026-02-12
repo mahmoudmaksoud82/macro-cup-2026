@@ -23,8 +23,7 @@ export default function Home() {
   useEffect(() => {
     setHasMounted(true);
     
-    // توقيت القاهرة (GMT+2) - الأحد 15 فبراير 2026 الساعة 2 ظهراً
-    // ملاحظة: مصر لا تتبع التوقيت الصيفي في شهر فبراير
+    // توقيت القاهرة (GMT+2)
     const targetDate = new Date("2026-02-15T14:00:00+02:00");
 
     const calculateTime = () => {
@@ -57,7 +56,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen pb-20 pt-10 relative bg-transparent flex flex-col items-center">
-      {/* Hero Content */}
       <div className="container mx-auto px-4 mb-12 text-center">
         <h1 className="text-5xl md:text-7xl font-bold font-headline mb-4 text-primary drop-shadow-sm">
           Macro Ramadan Cup 2026
@@ -102,12 +100,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Form Section */}
       <div className="container mx-auto px-4 relative z-30 w-full">
         <RegistrationForm />
       </div>
 
-      {/* Admin Access Section */}
       <div className="mt-12 mb-8 flex flex-col items-center gap-4 w-full max-w-xs px-4">
         {adminCode !== "RMM#26" ? (
           <div className="w-full space-y-2">

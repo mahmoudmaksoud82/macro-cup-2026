@@ -22,7 +22,6 @@ export default function RegistrationsPage() {
     setHasMounted(true);
   }, []);
 
-  // تأمين الاستعلام: لا يتم الطلب إلا إذا كان المستخدم مسجلاً للدخول
   const q = useMemoFirebase(() => {
     if (!firestore || !user) return null;
     return query(collection(firestore, "registrations"), orderBy("createdAt", "desc"));

@@ -155,8 +155,7 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* مواقع الصور: الشعار يسار، الختم يمين */}
-      <div className="absolute top-[20px] left-[20px] w-[86px] h-[86px] md:w-[160px] md:h-[160px] pointer-events-none z-0">
+      <div className="absolute top-[20px] right-[20px] w-[86px] h-[86px] md:w-[160px] md:h-[160px] pointer-events-none z-0">
         <Image 
           src="/logo.png"
           alt="logo"
@@ -168,7 +167,7 @@ export default function RegistrationForm() {
         />
       </div>
 
-      <div className="absolute top-[20px] right-[20px] w-[72px] h-[72px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
+      <div className="absolute top-[20px] left-[20px] w-[72px] h-[72px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
         <Image 
           src="/STAMP.png"
           alt="stamp"

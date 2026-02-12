@@ -1,56 +1,18 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    /**
-     * CORE PHILOSOPHY
-     * This ruleset implements a registration model for a sports event.
-     * To allow the dashboard to function while maintaining some level of privacy,
-     * we allow authenticated users to view the list of registrations and manage them.
-     */
-
-    // --- Helper Functions ---
-
-    /** @description Checks if the request is made by an authenticated user. */
     function isSignedIn() {
       return request.auth != null;
     }
 
-    /** @description Checks if the authenticated user's UID matches the provided ID. */
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    /** @description Verifies ownership and ensures the document exists for state-changing operations. */
-    function isExistingOwner(userId) {
-      return resource != null && isOwner(userId);
-    }
-
-    // --- Collection Rules ---
-
-    /**
-     * @description Rules for the registrations collection.
-     * @path /registrations/{registrationId}
-     * @allow (read) If the user is signed in (allowing the dashboard to function).
-     * @allow (create) If the user is signed in and the registrationId matches their UID.
-     * @allow (delete) If the user is signed in (to allow admin management from the dashboard).
-     */
     match /registrations/{registrationId} {
-      
-      // Allow authenticated users to read registration data.
       allow read: if isSignedIn();
-
-      // Allow creation only if the document ID matches the user's UID.
-      allow create: if isOwner(registrationId) && request.resource.data.id == registrationId;
-
-      // Allow updates only by the owner.
-      allow update: if isExistingOwner(registrationId) && request.resource.data.id == resource.data.id;
-      
-      // Allow deletion for any authenticated user to enable the dashboard management.
-      allow delete: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == registrationId;
+      allow update: if false;
+      allow delete: if false;
     }
 
-    // --- Global Deny ---
     match /{path=**} {
       allow read, write: if false;
     }
