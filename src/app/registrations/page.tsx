@@ -1,23 +1,21 @@
 
 "use client";
 
-import { useFirestore, useCollection, deleteDocumentNonBlocking, useUser } from "@/firebase";
-import { collection, query, orderBy, doc } from "firebase/firestore";
+import { useFirestore, useCollection, useUser } from "@/firebase";
+import { collection, query, orderBy } from "firebase/firestore";
 import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Users, LayoutDashboard, Download, Trash2, Shirt, Clock } from "lucide-react";
+import { Loader2, Trophy, Users, LayoutDashboard, Download, Shirt, Clock } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { Registration } from "@/lib/sports";
 import { useState, useEffect } from "react";
 
 export default function RegistrationsPage() {
   const firestore = useFirestore();
   const { user } = useUser();
-  const { toast } = useToast();
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
@@ -31,16 +29,6 @@ export default function RegistrationsPage() {
   }, [firestore, user]);
 
   const { data: registrations, isLoading } = useCollection<Registration>(q);
-
-  const handleDelete = (id: string, name: string) => {
-    if (confirm(`هل أنت متأكد من حذف تسجيل "${name}"؟`)) {
-      deleteDocumentNonBlocking(doc(firestore, "registrations", id));
-      toast({
-        title: "تم الحذف",
-        description: `تم حذف تسجيل ${name} بنجاح.`,
-      });
-    }
-  };
 
   const formatDateTime = (createdAt: any) => {
     if (!createdAt || !hasMounted) return "-";
@@ -163,7 +151,6 @@ export default function RegistrationsPage() {
                       <TableHead className="text-right">المقاس</TableHead>
                       <TableHead className="text-right">كود مايسترو</TableHead>
                       <TableHead className="text-right">وقت التسجيل</TableHead>
-                      <TableHead className="text-center">إجراءات</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -191,16 +178,6 @@ export default function RegistrationsPage() {
                             <Clock className="w-3 h-3" />
                             {formatDateTime(reg.createdAt)}
                           </div>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="text-destructive hover:bg-destructive/10"
-                            onClick={() => handleDelete(reg.id, reg.name)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
