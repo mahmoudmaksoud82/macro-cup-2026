@@ -6,6 +6,7 @@ import { collection, query, orderBy } from "firebase/firestore";
 import { useMemoFirebase } from "@/firebase/provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { Loader2, ArrowRight, ShieldCheck, Clock, Monitor } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
