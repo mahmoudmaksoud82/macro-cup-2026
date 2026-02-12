@@ -57,12 +57,12 @@ export default function Home() {
   return (
     <main className="min-h-screen pb-20 pt-10 relative bg-transparent flex flex-col items-center">
       <div className="container mx-auto px-4 mb-12 text-center">
-        <h1 className="text-5xl md:text-7xl font-bold font-headline mb-4 text-primary drop-shadow-sm">
+        <h1 className="text-5xl md:text-7xl font-bold font-headline mb-4 text-primary drop-shadow-sm text-center">
           Macro Ramadan Cup 2026
         </h1>
         
         <div className="space-y-6">
-          <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto opacity-90 text-foreground">
+          <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto opacity-90 text-foreground text-center">
             آخر ميعاد للتسجيل 15 فبراير الأحد 2 ظهراً (توقيت القاهرة)
           </p>
 
@@ -105,7 +105,7 @@ export default function Home() {
       </div>
 
       <div className="mt-12 mb-8 flex flex-col items-center gap-4 w-full max-w-xs px-4">
-        {adminCode !== "Rmc@2026" ? (
+        {adminCode !== "#Hogs@30uo" ? (
           <div className="w-full space-y-2">
             <p className="text-xs text-center text-muted-foreground font-medium">منطقة المسؤولين فقط (Admin Area)</p>
             <div className="relative w-full group">
