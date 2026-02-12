@@ -32,7 +32,6 @@ export default function RegistrationForm() {
   const [tShirtSize, setTShirtSize] = useState<string>("");
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
-  // تأمين الاستعلام: لا يتم الطلب إلا إذا كان المستخدم مسجلاً للدخول
   const registrationsQuery = useMemoFirebase(() => {
     if (!firestore || !user) return null;
     return query(collection(firestore, "registrations"));
@@ -71,12 +70,12 @@ export default function RegistrationForm() {
     const contact = formData.get("contact")?.toString() || "";
 
     if (nationalId.length !== 14) {
-      setStatus({ type: 'error', message: "الرقم القومي ناقص" });
+      setStatus({ type: 'error', message: "الرقم القومي يجب أن يكون 14 رقماً." });
       return;
     }
 
     if (contact.length !== 11) {
-      setStatus({ type: 'error', message: "رقم التواصل ناقص" });
+      setStatus({ type: 'error', message: "رقم التواصل يجب أن يكون 11 رقماً." });
       return;
     }
 
@@ -100,7 +99,7 @@ export default function RegistrationForm() {
         return;
       }
       if (isFootballFull) {
-        setStatus({ type: 'error', message: "تم اكمال الفرق لا يمكن التسجيل" });
+        setStatus({ type: 'error', message: "تم اكمال الفرق لا يمكن التسجيل." });
         return;
       }
     }
@@ -156,8 +155,8 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* الشعار والختم بمواقعهم الجديدة وأحجامهم المحسنة */}
-      <div className="absolute top-[20px] right-[20px] w-[86px] h-[86px] md:w-[160px] md:h-[160px] pointer-events-none z-0">
+      {/* مواقع الصور: الشعار يسار، الختم يمين */}
+      <div className="absolute top-[20px] left-[20px] w-[86px] h-[86px] md:w-[160px] md:h-[160px] pointer-events-none z-0">
         <Image 
           src="/logo.png"
           alt="logo"
@@ -169,7 +168,7 @@ export default function RegistrationForm() {
         />
       </div>
 
-      <div className="absolute top-[20px] left-[20px] w-[72px] h-[72px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
+      <div className="absolute top-[20px] right-[20px] w-[72px] h-[72px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
         <Image 
           src="/STAMP.png"
           alt="stamp"

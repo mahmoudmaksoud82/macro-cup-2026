@@ -22,7 +22,9 @@ export default function Home() {
 
   useEffect(() => {
     setHasMounted(true);
-    // توقيت القاهرة GMT+2
+    
+    // توقيت القاهرة (GMT+2) - الأحد 15 فبراير 2026 الساعة 2 ظهراً
+    // ملاحظة: مصر لا تتبع التوقيت الصيفي في شهر فبراير
     const targetDate = new Date("2026-02-15T14:00:00+02:00");
 
     const calculateTime = () => {
@@ -63,7 +65,7 @@ export default function Home() {
         
         <div className="space-y-6">
           <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto opacity-90 text-foreground">
-            آخر ميعاد للتسجيل 15 فبراير الأحد 2 ظهراً
+            آخر ميعاد للتسجيل 15 فبراير الأحد 2 ظهراً (توقيت القاهرة)
           </p>
 
           {hasMounted && (
