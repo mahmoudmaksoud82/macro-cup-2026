@@ -25,6 +25,7 @@ export default function LogsPage() {
   const router = useRouter();
   const [hasMounted, setHasMounted] = useState(false);
 
+  // الرمز السري الحالي للمسؤولين
   const ADMIN_SECRET = "#Hogs@30uo";
 
   // حماية الصفحة: طرد أي مستخدم لا يملك الرمز الحالي الصحيح

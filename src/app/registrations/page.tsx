@@ -22,9 +22,11 @@ export default function RegistrationsPage() {
   const [hasMounted, setHasMounted] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
 
+  // الرمز السري الحالي للمسؤولين
   const ADMIN_SECRET = "#Hogs@30uo";
 
   // حماية الصفحة: طرد أي مستخدم لا يملك الرمز الحالي الصحيح
+  // هذا يضمن أن تغيير الرمز في الكود سيعطل الجلسات القديمة فوراً
   useEffect(() => {
     setHasMounted(true);
     const token = sessionStorage.getItem("admin_token");
