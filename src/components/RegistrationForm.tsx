@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FOOTBALL_OPTIONS, GOVERNORATES, T_SHIRT_SIZES, GenderType, SportType, Registration } from "@/lib/sports";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle2, AlertCircle, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin, Briefcase, Shirt } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2, Trophy, Users, Phone, Hash, Building2, User, MapPin, Briefcase, Shirt, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useUser, useCollection } from "@/firebase";
 import { collection, doc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
@@ -31,6 +31,24 @@ export default function RegistrationForm() {
   const [sportOption, setSportOption] = useState<string>("");
   const [tShirtSize, setTShirtSize] = useState<string>("");
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [isExpired, setIsExpired] = useState(false);
+
+  // موعد الإغلاق: 15 فبراير 2026، الساعة 2 ظهراً بتوقيت القاهرة (GMT+2)
+  useEffect(() => {
+    const targetDate = new Date("2026-02-15T14:00:00+02:00");
+    const checkExpiry = () => {
+      const now = new Date();
+      if (now >= targetDate) {
+        setIsExpired(true);
+        return true;
+      }
+      return false;
+    };
+
+    checkExpiry();
+    const interval = setInterval(checkExpiry, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const registrationsQuery = useMemoFirebase(() => {
     if (!firestore || !user) return null;
@@ -60,6 +78,13 @@ export default function RegistrationForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // منع التسجيل إذا انتهى الوقت
+    if (isExpired) {
+      setStatus({ type: 'error', message: "عذراً، انتهى موعد التسجيل الرسمي ولا يمكن استقبال طلبات جديدة." });
+      return;
+    }
+
     if (!user) {
       toast({ variant: "destructive", title: "خطأ", description: "يرجى الانتظار حتى يتم تسجيل الدخول." });
       return;
@@ -195,6 +220,16 @@ export default function RegistrationForm() {
       
       <form onSubmit={handleSubmit} className="relative z-10">
         <CardContent className="space-y-6">
+          {isExpired && (
+            <Alert variant="destructive" className="animate-bounce">
+              <Clock className="h-4 w-4" />
+              <AlertTitle>تنبيه: تم إغلاق التسجيل</AlertTitle>
+              <AlertDescription>
+                عذراً، لقد انتهى الموعد الرسمي للتسجيل في البطولة.
+              </AlertDescription>
+            </Alert>
+          )}
+
           {status && (
             <Alert variant={status.type === 'error' ? 'destructive' : 'default'} className={status.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : ''}>
               {status.type === 'error' ? <AlertCircle className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4 text-green-600" />}
@@ -203,33 +238,33 @@ export default function RegistrationForm() {
             </Alert>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-100 transition-opacity duration-500" style={{ opacity: isExpired ? 0.6 : 1 }}>
             <div className="space-y-2">
               <Label htmlFor="name" className="flex items-center gap-2">
                 <User className="w-4 h-4 text-accent" /> الاسم بالكامل
               </Label>
-              <Input id="name" name="name" required placeholder="أدخل اسمك الثلاثي" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
+              <Input id="name" name="name" required disabled={isExpired} placeholder="أدخل اسمك الثلاثي" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="department" className="flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-accent" /> الإدارة
               </Label>
-              <Input id="department" name="department" required placeholder="اسم الإدارة التابع لها" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
+              <Input id="department" name="department" required disabled={isExpired} placeholder="اسم الإدارة التابع لها" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="jobTitle" className="flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-accent" /> المسمى الوظيفي
               </Label>
-              <Input id="jobTitle" name="jobTitle" required placeholder="أدخل مسمّاك الوظيفي" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
+              <Input id="jobTitle" name="jobTitle" required disabled={isExpired} placeholder="أدخل مسمّاك الوظيفي" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-accent" /> المحافظة
               </Label>
-              <Select value={governorate} onValueChange={setGovernorate} required>
+              <Select value={governorate} onValueChange={setGovernorate} required disabled={isExpired}>
                 <SelectTrigger className="bg-white/50">
                   <SelectValue placeholder="اختر المحافظة" />
                 </SelectTrigger>
@@ -245,7 +280,7 @@ export default function RegistrationForm() {
               <Label htmlFor="maestroCode" className="flex items-center gap-2">
                 <Hash className="w-4 h-4 text-accent" /> كود مايسترو
               </Label>
-              <Input id="maestroCode" name="maestroCode" required placeholder="كود التعريف الخاص بك" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
+              <Input id="maestroCode" name="maestroCode" required disabled={isExpired} placeholder="كود التعريف الخاص بك" className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" />
             </div>
 
             <div className="space-y-2">
@@ -256,6 +291,7 @@ export default function RegistrationForm() {
                 id="nationalId" 
                 name="nationalId" 
                 required 
+                disabled={isExpired}
                 placeholder="14 رقم" 
                 maxLength={14} 
                 className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" 
@@ -273,6 +309,7 @@ export default function RegistrationForm() {
                 id="contact" 
                 name="contact" 
                 required 
+                disabled={isExpired}
                 placeholder="رقم الهاتف" 
                 maxLength={11}
                 className="transition-all focus:ring-2 focus:ring-primary/20 bg-white/50" 
@@ -286,7 +323,7 @@ export default function RegistrationForm() {
               <Label className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-accent" /> النوع
               </Label>
-              <Select name="gender" required onValueChange={(val) => setGender(val as GenderType)}>
+              <Select name="gender" required disabled={isExpired} onValueChange={(val) => setGender(val as GenderType)}>
                 <SelectTrigger className="bg-white/50">
                   <SelectValue placeholder="اختر النوع" />
                 </SelectTrigger>
@@ -301,7 +338,7 @@ export default function RegistrationForm() {
               <Label className="flex items-center gap-2">
                 <Trophy className="w-4 h-4 text-accent" /> الرياضة
               </Label>
-              <Select name="sport" value={sport} required onValueChange={(val) => setSport(val as SportType)}>
+              <Select name="sport" value={sport} required disabled={isExpired} onValueChange={(val) => setSport(val as SportType)}>
                 <SelectTrigger className="bg-white/50">
                   <SelectValue placeholder="اختر الرياضة" />
                 </SelectTrigger>
@@ -328,7 +365,7 @@ export default function RegistrationForm() {
                   {isFootballFull ? (
                     <p className="text-destructive font-bold text-sm bg-destructive/10 p-2 rounded">تم اكمال الفرق لا يمكن التسجيل</p>
                   ) : (
-                    <Select name="sportOption" required onValueChange={setSportOption}>
+                    <Select name="sportOption" required disabled={isExpired} onValueChange={setSportOption}>
                       <SelectTrigger className="bg-white/50">
                         <SelectValue placeholder="اختر الاختيار المتاح" />
                       </SelectTrigger>
@@ -344,7 +381,7 @@ export default function RegistrationForm() {
                   <Label className="flex items-center gap-2">
                     <Shirt className="w-4 h-4 text-accent" /> مقاس التيشرت
                   </Label>
-                  <Select value={tShirtSize} onValueChange={setTShirtSize} required>
+                  <Select value={tShirtSize} onValueChange={setTShirtSize} required disabled={isExpired}>
                     <SelectTrigger className="bg-white/50">
                       <SelectValue placeholder="اختر المقاس" />
                     </SelectTrigger>
@@ -362,10 +399,10 @@ export default function RegistrationForm() {
         <CardFooter>
           <Button 
             type="submit" 
-            className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 transition-all shadow-lg" 
-            disabled={isSubmitting || isUserLoading || (sport === 'football' && isFootballFull)}
+            className={`w-full py-6 text-lg font-bold transition-all shadow-lg ${isExpired ? 'bg-muted text-muted-foreground' : 'bg-primary hover:bg-primary/90'}`}
+            disabled={isSubmitting || isUserLoading || isExpired || (sport === 'football' && isFootballFull)}
           >
-            {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> جاري التسجيل...</> : "تأكيد التسجيل"}
+            {isExpired ? "انتهى موعد التسجيل" : isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> جاري التسجيل...</> : "تأكيد التسجيل"}
           </Button>
         </CardFooter>
       </form>
