@@ -20,12 +20,13 @@ export default function Home() {
     isExpired: false
   });
 
+  // الرمز السري الموحد للنظام
   const ADMIN_SECRET = "#Hogs@30uo";
 
   useEffect(() => {
     setHasMounted(true);
     
-    // توقيت القاهرة (GMT+2)
+    // توقيت القاهرة (GMT+2) - موعد الإغلاق: الأحد 15 فبراير 2026 الساعة 2 ظهراً
     const targetDate = new Date("2026-02-15T14:00:00+02:00");
 
     const calculateTime = () => {

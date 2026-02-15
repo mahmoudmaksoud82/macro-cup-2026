@@ -179,6 +179,7 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
+      {/* تبديل مواقع الشعارات */}
       <div className="absolute top-[20px] left-[20px] w-[72px] h-[72px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
         <Image 
           src="/STAMP.png"
@@ -217,6 +218,7 @@ export default function RegistrationForm() {
       
       <form onSubmit={handleSubmit} className="relative z-10">
         <CardContent className="space-y-6">
+          {/* عرض صورة إغلاق التسجيل عند انتهاء الموعد */}
           {isExpired && (
             <div className="space-y-4 animate-in fade-in zoom-in duration-500">
               <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl border-4 border-destructive/20">
