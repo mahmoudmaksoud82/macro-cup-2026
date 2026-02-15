@@ -79,7 +79,6 @@ export default function RegistrationForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // منع التسجيل إذا انتهى الوقت
     if (isExpired) {
       setStatus({ type: 'error', message: "عذراً، انتهى موعد التسجيل الرسمي ولا يمكن استقبال طلبات جديدة." });
       return;
@@ -180,7 +179,6 @@ export default function RegistrationForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-xl border-t-4 border-t-primary bg-card/95 relative overflow-hidden">
-      {/* الختم في اليسار */}
       <div className="absolute top-[20px] left-[20px] w-[72px] h-[72px] md:w-[140px] md:h-[140px] pointer-events-none z-0">
         <Image 
           src="/STAMP.png"
@@ -193,7 +191,6 @@ export default function RegistrationForm() {
         />
       </div>
 
-      {/* الشعار في اليمين */}
       <div className="absolute top-[20px] right-[20px] w-[86px] h-[86px] md:w-[160px] md:h-[160px] pointer-events-none z-0">
         <Image 
           src="/logo.png"
@@ -221,13 +218,24 @@ export default function RegistrationForm() {
       <form onSubmit={handleSubmit} className="relative z-10">
         <CardContent className="space-y-6">
           {isExpired && (
-            <Alert variant="destructive" className="animate-bounce">
-              <Clock className="h-4 w-4" />
-              <AlertTitle>تنبيه: تم إغلاق التسجيل</AlertTitle>
-              <AlertDescription>
-                عذراً، لقد انتهى الموعد الرسمي للتسجيل في البطولة.
-              </AlertDescription>
-            </Alert>
+            <div className="space-y-4 animate-in fade-in zoom-in duration-500">
+              <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl border-4 border-destructive/20">
+                <Image 
+                  src="/endapp.jpg"
+                  alt="Registration Closed"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <Alert variant="destructive" className="border-destructive/50 bg-destructive/5">
+                <Clock className="h-5 w-5" />
+                <AlertTitle className="text-lg font-bold">تنبيه: تم إغلاق التسجيل</AlertTitle>
+                <AlertDescription className="text-base">
+                  عذراً، لقد انتهى الموعد الرسمي للتسجيل في البطولة ولا يمكن استقبال طلبات جديدة حالياً.
+                </AlertDescription>
+              </Alert>
+            </div>
           )}
 
           {status && (
@@ -238,7 +246,7 @@ export default function RegistrationForm() {
             </Alert>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-100 transition-opacity duration-500" style={{ opacity: isExpired ? 0.6 : 1 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-500" style={{ opacity: isExpired ? 0.4 : 1, pointerEvents: isExpired ? 'none' : 'auto' }}>
             <div className="space-y-2">
               <Label htmlFor="name" className="flex items-center gap-2">
                 <User className="w-4 h-4 text-accent" /> الاسم بالكامل
