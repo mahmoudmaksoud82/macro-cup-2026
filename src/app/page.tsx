@@ -20,7 +20,7 @@ export default function Home() {
     isExpired: false
   });
 
-  // الرمز السري الموحد للنظام
+  // الرمز السري الموحد والنظام
   const ADMIN_SECRET = "#Hogs@30uo";
 
   useEffect(() => {
